@@ -1,7 +1,9 @@
-
+import random
 
 import pygame
 from mySprite import mySprite
+from window import Window
+
 
 class HandEnemy(mySprite):
     """
@@ -47,8 +49,18 @@ class HandEnemy(mySprite):
         """
         self._SURFACE = pygame.transform.flip(self._SURFACE, True, False)
 
+    def handFallAttack(self):
+        self.setPosition(
+            (
+                random.randrange(Window.getWidth() - self.getWidth()),
+                0
+            )
+        )
+
+        self.__Y += self.__SPD * self.__DIR_Y
+        if self.__Y >= Window.getHeight() - self.getHeight():
+
 if __name__ == "__main__":
-    from window import Window
     pygame.init()
 
     WINDOW = Window("Image Sprite Test")
