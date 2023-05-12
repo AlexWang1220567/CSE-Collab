@@ -14,13 +14,13 @@ class mySprite:
         self.__WIDTH = WIDTH
         self._DIM = (self.__WIDTH, self.__HEIGHT)
         self._SURFACE = pygame.Surface
-        self.__X = X
-        self.__Y = Y
-        self.__POS = (self.__X, self.__Y)
-        self.__SPD = SPD
+        self._X = X
+        self._Y = Y
+        self.__POS = (self._X, self._Y)
+        self._SPD = SPD
         self._COLOR = COLOR
-        self.__DIR_X = 1
-        self.__DIR_Y = 1
+        self._DIR_X = 1
+        self._DIR_Y = 1
 
     def setWidth(self, WIDTH):
         self.__WIDTH = WIDTH
@@ -31,32 +31,32 @@ class mySprite:
         self.__DIM = (self.__WIDTH, self.__HEIGHT)
 
     def setPosition(self, TUPLE):
-        self.__X = TUPLE[0]
-        self.__Y = TUPLE[1]
-        self.__POS = (self.__X, self.__Y)
+        self._X = TUPLE[0]
+        self._Y = TUPLE[1]
+        self.__POS = (self._X, self._Y)
 
     def setColor(self, TUPLE):
         self._COLOR = TUPLE
 
     def setSPD(self, SPD):
-        self.__SPD = SPD
+        self._SPD = SPD
 
     # Movement Method
 
     def marqueeX(self, MAX_WIDTH, MIN_WIDTH=0):
-        self.__X += self.__SPD
-        if self.__X > MAX_WIDTH:
-            self.__X = MIN_WIDTH - self.getWidth()
+        self._X += self._SPD
+        if self._X > MAX_WIDTH:
+            self._X = MIN_WIDTH - self.getWidth()
 
-        self.__POS = (self.__X, self.__Y)
+        self.__POS = (self._X, self._Y)
 
     def bounceX(self, SPRITE_WIDTH, MAX_WIDTH, MIN_WIDTH=0):
-        self.__X += self.__SPD * self.__DIR_X
-        if self.__X > MAX_WIDTH - SPRITE_WIDTH:
-            self.__DIR_X = -1
-        if self.__X < MIN_WIDTH:
-            self.__DIR_X = 1
-        self.__POS = (self.__X, self.__Y)
+        self._X += self._SPD * self._DIR_X
+        if self._X > MAX_WIDTH - SPRITE_WIDTH:
+            self._DIR_X = -1
+        if self._X < MIN_WIDTH:
+            self._DIR_X = 1
+        self.__POS = (self._X, self._Y)
 
     def moveWASD(self, KEYS_PRESSED):
         """
@@ -65,25 +65,25 @@ class mySprite:
         :return: None
         """
         if KEYS_PRESSED[pygame.K_d]:
-            self.__X += self.__SPD
+            self._X += self._SPD
         if KEYS_PRESSED[pygame.K_a]:
-            self.__X -= self.__SPD
+            self._X -= self._SPD
         if KEYS_PRESSED[pygame.K_w]:
-            self.__Y -= self.__SPD
+            self._Y -= self._SPD
         if KEYS_PRESSED[pygame.K_s]:
-            self.__Y += self.__SPD
-        self.__POS = (self.__X, self.__Y)
+            self._Y += self._SPD
+        self.__POS = (self._X, self._Y)
 
     def checkBoundries(self, MAX_X, MAX_Y, MIN_X=0, MIN_Y=0):
-        if self.__X > MAX_X - self.getWidth():
-            self.__X = MAX_X - self.getWidth()
-        if self.__X < MIN_X:
-            self.__X = MIN_X
-        if self.__Y > MAX_Y - self.getHeight():
-            self.__Y = MAX_Y - self.getHeight()
-        if self.__Y < MIN_Y:
-            self.__Y = MIN_Y
-        self.__POS = (self.__X, self.__Y)
+        if self._X > MAX_X - self.getWidth():
+            self._X = MAX_X - self.getWidth()
+        if self._X < MIN_X:
+            self._X = MIN_X
+        if self._Y > MAX_Y - self.getHeight():
+            self._Y = MAX_Y - self.getHeight()
+        if self._Y < MIN_Y:
+            self._Y = MIN_Y
+        self.__POS = (self._X, self._Y)
 
     def getWidth(self):
         return self._SURFACE.get_width()
@@ -113,7 +113,7 @@ class mySprite:
         SPRITE_W = DIMINSION[0]
         SPRITE_H = DIMINSION[1]
 
-        if SPRITE_X >= self.__X - SPRITE_W and SPRITE_X <= self.__X + self.getWidth():
-            if SPRITE_Y >= self.__Y - SPRITE_H and SPRITE_Y <= self.__Y + self.getHeight():
+        if SPRITE_X >= self._X - SPRITE_W and SPRITE_X <= self._X + self.getWidth():
+            if SPRITE_Y >= self._Y - SPRITE_H and SPRITE_Y <= self._Y + self.getHeight():
                 return True
         return False
