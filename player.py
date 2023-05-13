@@ -36,7 +36,7 @@ class Player(mySprite):
                 self.setFlipX()
                 self.__X_FLIP = True
         ### JUMPING
-        if KEYS_PRESSED[pygame.K_SPACE]:
+        if KEYS_PRESSED[pygame.K_SPACE] and self.JUMPING_Y == 0:
             self.IS_JUMPING = True
 
         self.setPosition((self._X, self._Y))
@@ -117,11 +117,12 @@ if __name__ == "__main__":
             PLAYER.jumpPlayer()
         else:
             PLAYER.fall()
-            PLAYER.JUMPING_Y = 0
+            #PLAYER.JUMPING_Y = 0
         PLAYER.checkBoundries(WINDOW.getWidth(), WINDOW.getHeight()-PLATFORM.getHeight())
 
         # PLATFORM
-        #if PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
+        if PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
+            PLAYER.JUMPING_Y = 0
         #   PLAYER.setPosition((PLAYER.getPOS()[0], PLAYER.getPOS()[1]-PLAYER.getSPD()))
 
         #else:
