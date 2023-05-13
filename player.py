@@ -13,9 +13,11 @@ class Player(mySprite):
         mySprite.__init__(self)
         self._SURFACE = pygame.image.load("sprite_images/shrubs.png").convert_alpha()
         self.__X_FLIP = False
-        self.__JUMPING_Y = 0
+        self.JUMPING_Y = 0
         self.IS_JUMPING = False
+        self.JUMP_HEIGHT = 100
         self.__HEALTH = 100
+        self.setSPD(5)
 
     def setHealth(self, HEALTH):
         self.__HEALTH = HEALTH
@@ -33,24 +35,26 @@ class Player(mySprite):
             if not self.__X_FLIP:
                 self.setFlipX()
                 self.__X_FLIP = True
-
-    def isJumping(self, KEYS_PRESSED):
-        # JUMPING
+        ### JUMPING
         if KEYS_PRESSED[pygame.K_SPACE]:
             self.IS_JUMPING = True
-            return True
+
+        self.setPosition((self._X, self._Y))
 
     def jumpPlayer(self):
 
-        if self.__JUMPING_Y <= 50 and not self.__JUMPING:
-            self.__JUMPING = True
-            self.__JUMPING_Y += 10
-            self._Y += 10
+        if self.JUMPING_Y <= self.JUMP_HEIGHT:
+            self.JUMPING_Y += self._SPD +5
+            self._Y -= self._SPD +5
+        else:
+            self.IS_JUMPING = False
+            self.fall()
+
 
         self.setPosition((self._X, self._Y))
 
     def fall(self):
-        self._Y -= 10
+        self._Y += self._SPD +5
         self.setPosition((self._X, self._Y))
 
     def setScale(self, SCALE_X, SCALE_Y=0):
@@ -78,29 +82,58 @@ class Player(mySprite):
     def getHealth(self):
         return self.__HEALTH
 
+    def getSPD(self):
+        return self._SPD
+
 
 if __name__ == "__main__":
 
     from window import Window
-
+    from platform import Platform
     pygame.init()
 
     WINDOW = Window("Image Sprite Test")
     PLAYER = Player()
-    PLAYER.setSPD(15)
     PLAYER.setScale(0.1)
     PLAYER.setFlipX()
     PLAYER.setPosition((0, WINDOW.getHeight()-PLAYER.getHeight()))
+
+    PLATFORM = Platform(30, WINDOW.getWidth())
+    PLATFORM.setPosition((0, WINDOW.getHeight()-PLATFORM.getHeight()))
+
+
     while True:
+        ### INPUT
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
         PRESSED_KEYS = pygame.key.get_pressed()
-        PLAYER.movePlayer(PRESSED_KEYS)
 
+        ### PROCESSING
+        PLAYER.movePlayer(PRESSED_KEYS)
+        # JUMP
+        if PLAYER.IS_JUMPING:
+            PLAYER.jumpPlayer()
+        else:
+            PLAYER.fall()
+            PLAYER.JUMPING_Y = 0
+        PLAYER.checkBoundries(WINDOW.getWidth(), WINDOW.getHeight()-PLATFORM.getHeight())
+
+        # PLATFORM
+        #if PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
+        #   PLAYER.setPosition((PLAYER.getPOS()[0], PLAYER.getPOS()[1]-PLAYER.getSPD()))
+
+        #else:
+            #if not PLAYER.IS_JUMPING and PLAYER.JUMPING_Y >= PLAYER.JUMP_HEIGHT:
+         #       PLAYER.fall()
+
+
+
+        ### OUTPUT
         WINDOW.ClearScreen()
         WINDOW.getSurface().blit(PLAYER.getSurface(), PLAYER.getPOS())
+        WINDOW.getSurface().blit(PLATFORM.getSurface(), PLATFORM.getPOS())
         WINDOW.updateFrames()
 
 
