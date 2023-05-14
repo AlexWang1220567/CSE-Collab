@@ -24,6 +24,11 @@ if __name__ == "__main__":
     PLATFORM = Platform(30, WINDOW.getWidth())
 
     PLATFORM.setPosition((0, WINDOW.getHeight()-PLATFORM.getHeight()))
+
+    PLATFORMS = []
+    PLATFORM_2 = Platform(100, 100)
+    PLATFORM_2.setPosition(())
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
