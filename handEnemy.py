@@ -1,8 +1,16 @@
+"""
+Title: Actions file for image sprites
+Author: Pushkar Talwar
+Date-created: 05-11-2023
+"""
+
+
 import random
 
 import pygame
 from mySprite import mySprite
 from window import Window
+from  player import Player
 
 
 class HandEnemy(mySprite):
@@ -13,7 +21,7 @@ class HandEnemy(mySprite):
         mySprite.__init__(self)
         self.__FILE_LOC = IMAGE_FILE
         self._SURFACE = pygame.image.load(self.__FILE_LOC).convert_alpha()
-        self.__X_FLIP = False
+        self.__X_FLIP = True
 
     def moveWASD(self, KEYS_PRESSED):
 
@@ -49,7 +57,7 @@ class HandEnemy(mySprite):
         """
         self._SURFACE = pygame.transform.flip(self._SURFACE, True, False)
 
-    def handFallAttack(self):
+    def handFallAttack(self, Window):
         self.setPosition(
             (
                 random.randrange(Window.getWidth() - self.getWidth()),
@@ -57,25 +65,33 @@ class HandEnemy(mySprite):
             )
         )
 
-        self.__Y += self.__SPD * self.__DIR_Y
-        if self.__Y >= Window.getHeight() - self.getHeight():
+        self._Y += self._SPD * self._DIR_Y
+        if self._Y >= Window.getHeight() - self.getHeight():
+            pass
 
 if __name__ == "__main__":
     pygame.init()
-
-    WINDOW = Window("Image Sprite Test")
-    BUNNY = ImageSprite("images/bunny.png")
+    time_since_action = 0
+    clock = pygame.time.Clock()
+    WINDOW = Window("Hand enemy Test")
+    BUNNY = HandEnemy("sprite_images/thumb.png")
     BUNNY.setSPD(15)
-    BUNNY.setScale(0.5)
+    BUNNY.setScale(1)
     BUNNY.setFlipX()
+    BUNNY.setPosition(
+        (
+            0,0
+        )
+    )
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+        TIME = clock.tick()
         PRESSED_KEYS = pygame.key.get_pressed()
         BUNNY.moveWASD(PRESSED_KEYS)
-
+        BUNNY.handFallAttack(WINDOW)
         WINDOW.ClearScreen()
         WINDOW.getSurface().blit(BUNNY.getSurface(), BUNNY.getPOS())
         WINDOW.updateFrames()
