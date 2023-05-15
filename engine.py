@@ -4,7 +4,6 @@ author: Mengqi Wang, Pushkar Talwar
 date-created: 05/12/2023
 """
 import pygame
-from handEnemy import HandEnemy
 from platform import Platform
 from player import Player
 from window import Window
@@ -39,21 +38,46 @@ class Engine:
 
     def bossRoom(self):
 
+        self.__WINDOW = Window("Image Sprite Test")
+        self.__PLAYER = Player()
+        self.__PLAYER.setScale(0.1)
+        self.__PLAYER.setFlipX()
+        self.__PLAYER.setPosition((0, self.__WINDOW.getHeight() - self.__PLAYER.getHeight()))
+
+        PLATFORM = Platform(30, self.__WINDOW.getWidth())
+        PLATFORM.setPosition((0, self.__WINDOW.getHeight() - PLATFORM.getHeight()))
+
         while True:
-            # INPUTS
+            ### INPUT
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
-
             PRESSED_KEYS = pygame.key.get_pressed()
 
-            # PROCESSING
+            ### PROCESSING
             self.__PLAYER.movePlayer(PRESSED_KEYS)
+            # JUMP
+            if self.__PLAYER.IS_JUMPING:
+                self.__PLAYER.jumpPlayer()
+            else:
+                self.__PLAYER.fall()
+                # PLAYER.JUMPING_Y = 0
+            self.__PLAYER.checkBoundries(self.__WINDOW.getWidth(), self.__WINDOW.getHeight() - PLATFORM.getHeight())
 
-            # OUTPUTS
+            # PLATFORM
+            if self.__PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
+                self.__PLAYER.JUMPING_Y = 0
+            #   PLAYER.setPosition((PLAYER.getPOS()[0], PLAYER.getPOS()[1]-PLAYER.getSPD()))
+
+            # else:
+            # if not PLAYER.IS_JUMPING and PLAYER.JUMPING_Y >= PLAYER.JUMP_HEIGHT:
+            #       PLAYER.fall()
+
+            ### OUTPUT
             self.__WINDOW.ClearScreen()
             self.__WINDOW.getSurface().blit(self.__PLAYER.getSurface(), self.__PLAYER.getPOS())
+            self.__WINDOW.getSurface().blit(PLATFORM.getSurface(), PLATFORM.getPOS())
             self.__WINDOW.updateFrames()
 
 
