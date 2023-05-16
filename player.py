@@ -11,13 +11,20 @@ class Player(mySprite):
 
     def __init__(self):
         mySprite.__init__(self)
-        self._SURFACE = pygame.image.load("sprite_images/shrubs.png").convert_alpha()
+        self.__IMAGES = []
+        self.__IMAGES.append(pygame.image.load("sprite_images/shrubs.png").convert_alpha())
+        self.__IMAGES.append(pygame.image.load("sprite_images/bunny.png").convert_alpha())
+        self.__IMAGE_IND = 0
+        self._SURFACE = self.__IMAGES[1]
         self.__X_FLIP = False
         self.JUMPING_Y = 0
         self.IS_JUMPING = False
         self.JUMP_HEIGHT = 120
         self.__HEALTH = 100
         self.setSPD(5)
+
+    def setSprite(self, SPRITE):
+        self._SURFACE = pygame.image.load(f"{SPRITE}").convert_alpha()
 
     def setHealth(self, HEALTH):
         self.__HEALTH = HEALTH
@@ -94,6 +101,11 @@ if __name__ == "__main__":
     WINDOW = Window("Image Sprite Test")
     PLAYER = Player()
     PLAYER.setScale(0.1)
+
+    TIME_ELAPSED = 0
+    PLAYER.setSprite("sprite_images/bunny.png")
+
+    # SPRITE CHANGE
     PLAYER.setFlipX()
     PLAYER.setPosition((0, WINDOW.getHeight()-PLAYER.getHeight()))
 
