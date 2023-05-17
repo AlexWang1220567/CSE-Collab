@@ -26,22 +26,12 @@ class Player(mySprite):
     def setSprite(self, KEYS_PRESSED):
         self._SURFACE = self.IMAGES[self.IMAGE_IND]
         if KEYS_PRESSED[pygame.K_a]:
-            if self.__X_FLIP:
-                self.setFlipX()
-                self.__X_FLIP = False
-            else:
-                self.setFlipX()
-                self.__X_FLIP = True
-        if KEYS_PRESSED[pygame.K_d]:
-            if not self.__X_FLIP:
-                self.setFlipX()
-                self.__X_FLIP = True
-            else:
-                self.setFlipX()
-                self.__X_FLIP = False
 
-    def setHealth(self, HEALTH):
-        self.__HEALTH = HEALTH
+            self.__X_FLIP = True
+
+
+    def deductHealth(self, DAMAGE):
+        self.__HEALTH -= DAMAGE
 
     def movePlayer(self, KEYS_PRESSED):
 
@@ -104,6 +94,8 @@ class Player(mySprite):
 
     def getSPD(self):
         return self._SPD
+    def getFlip(self):
+        return self.__X_FLIP
 
 
 if __name__ == "__main__":
@@ -164,6 +156,7 @@ if __name__ == "__main__":
             # REPLACE SPRITE
             PRESSED_KEYS = pygame.key.get_pressed()
             PLAYER.setSprite(PRESSED_KEYS)
+            print(PLAYER.getFlip())
             TIME_ELAPSED = 0
 
 
