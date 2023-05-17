@@ -11,11 +11,11 @@ class Player(mySprite):
 
     def __init__(self):
         mySprite.__init__(self)
-        self.__IMAGES = []
-        self.__IMAGES.append(pygame.image.load("sprite_images/shrubs.png").convert_alpha())
-        self.__IMAGES.append(pygame.image.load("sprite_images/bunny.png").convert_alpha())
-        self.__IMAGE_IND = 0
-        self._SURFACE = self.__IMAGES[1]
+        self.IMAGES = []
+        self.IMAGES.append(pygame.image.load("sprite_images/fireHand.png").convert_alpha())
+        self.IMAGES.append(pygame.image.load("sprite_images/thumb.png").convert_alpha())
+        self.IMAGE_IND = 0
+        self._SURFACE = self.IMAGES[self.IMAGE_IND]
         self.__X_FLIP = False
         self.JUMPING_Y = 0
         self.IS_JUMPING = False
@@ -23,8 +23,8 @@ class Player(mySprite):
         self.__HEALTH = 100
         self.setSPD(5)
 
-    def setSprite(self, SPRITE):
-        self._SURFACE = pygame.image.load(f"{SPRITE}").convert_alpha()
+    def setSprite(self):
+        self._SURFACE = self.IMAGES[self.IMAGE_IND]
 
     def setHealth(self, HEALTH):
         self.__HEALTH = HEALTH
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     PLAYER.setScale(0.1)
 
     TIME_ELAPSED = 0
-    PLAYER.setSprite("sprite_images/bunny.png")
+    PLAYER.setSprite()
 
     # SPRITE CHANGE
     PLAYER.setFlipX()
@@ -130,6 +130,19 @@ if __name__ == "__main__":
             PLAYER.fall()
             #PLAYER.JUMPING_Y = 0
         PLAYER.checkBoundries(WINDOW.getWidth(), WINDOW.getHeight()-PLATFORM.getHeight())
+
+        # ANIMATION
+        TIME_ELAPSED += 1
+        if TIME_ELAPSED >= 250:
+            # NOT OUT OF SPRITES YET
+            if PLAYER.IMAGE_IND < len(PLAYER.IMAGES) -1:
+                PLAYER.IMAGE_IND += 1
+            else:
+                PLAYER.IMAGE_IND = 0
+            # REPLACE SPRITE
+            PLAYER.setSprite()
+            TIME_ELAPSED = 0
+
 
         # PLATFORM
         if PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
