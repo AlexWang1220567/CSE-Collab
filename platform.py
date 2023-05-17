@@ -10,9 +10,10 @@ import pygame
 class Platform(mySprite):
     def __init__(self, HEIGHT=0, WIDTH=0):
         mySprite.__init__(self, HEIGHT, WIDTH)
-        self.__COLOR = (0, 0, 0)
+        self._COLOR = (0, 0, 0)
         self._SURFACE = pygame.Surface(self._DIM, pygame.SRCALPHA, 32)
-        self._SURFACE.fill(self.__COLOR)
+        self._SURFACE.fill(self._COLOR)
+
 
 if __name__ == "__main__":
 
@@ -27,8 +28,8 @@ if __name__ == "__main__":
 
     PLATFORMS = []
     PLATFORM_2 = Platform(100, 100)
-    PLATFORM_2.setPosition(())
-
+    #PLATFORM_2.setPosition(())
+    PLATFORM.setColor((200, 200, 200))
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

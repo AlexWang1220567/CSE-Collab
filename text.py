@@ -1,4 +1,8 @@
-
+"""
+title: the text class
+author: Pushkar Talwar
+date-created: 05/10/2023
+"""
 import pygame
 
 from mySprite import mySprite

@@ -1,6 +1,8 @@
 """
+title: the sprite class
+author: Pushkar Talwar
+date-created: 05/10/2023
 """
-
 import pygame
 
 
@@ -37,6 +39,7 @@ class mySprite:
 
     def setColor(self, TUPLE):
         self._COLOR = TUPLE
+        self._SURFACE.fill(self._COLOR)
 
     def setSPD(self, SPD):
         self._SPD = SPD

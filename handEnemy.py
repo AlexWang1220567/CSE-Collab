@@ -154,6 +154,42 @@ class Hand_Engine:
         pass
 
     def run(self):
+
+        from window import Window
+        from platform import Platform
+        from boss import Boss
+        pygame.init()
+
+        WINDOW = Window("Image Sprite Test")
+        PLAYER = Player()
+        # PLAYER.setScale(0.1)
+
+        TIME_ELAPSED = 0
+
+        # SPRITE CHANGE
+        PLAYER.setFlipX()
+        PLAYER.setPosition((0, WINDOW.getHeight() - PLAYER.getHeight()))
+
+        PLATFORM = Platform(40, WINDOW.getWidth())
+        PLATFORM.setPosition((0, WINDOW.getHeight() - PLATFORM.getHeight()))
+
+        ##### BOSS #####
+        BOSS = Boss()
+        BOSS.setPosition(
+            (WINDOW.getWidth() - BOSS.getWidth(), WINDOW.getHeight() - PLATFORM.getHeight() - BOSS.getHeight()))
+        # BOSS_HEALTH_BAR = Platform(10, 200)
+        # BOSS_HEALTH_BAR.setColor((250, 0, 0))
+        BOSS.BOSS_HEALTH_BAR.setPosition(
+            (BOSS.getPOS()[0] + BOSS.BOSS_HEALTH_BAR.getWidth() // 2, BOSS.getPOS()[1] + 20))
+        ##### MUSIC #####
+        pygame.mixer.pre_init(44100, -16, 2, 2048)  # setup mixer to avoid sound lag
+        pygame.mixer.init()
+        pygame.mixer.music.load('sprite_images/deathScene.mp3')
+        pygame.mixer.music.play(-1)
+
+
+
+
         ### Time since clocks
         time_since_fall = 0
         time_since_laser = 0
@@ -224,6 +260,9 @@ class Hand_Engine:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
+
+            PRESSED_KEYS = pygame.key.get_pressed()
+
             TIME = clock.tick()
             time_since_fall += TIME
             time_since_laser += TIME
@@ -249,8 +288,51 @@ class Hand_Engine:
                             LASER_HAND.getPOS()[1] + LASER_HAND.getHeight() // 2
                         )
                     )
+
+            ### PROCESSING
+            PLAYER.movePlayer(PRESSED_KEYS)
+            # JUMP
+            if PLAYER.IS_JUMPING:
+                PLAYER.jumpPlayer()
+            else:
+                PLAYER.fall()
+                # PLAYER.JUMPING_Y = 0
+            PLAYER.checkBoundries(WINDOW.getWidth(), WINDOW.getHeight() - PLATFORM.getHeight())
+            # PLATFORM
+            if PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
+                PLAYER.JUMPING_Y = 0
+            #   PLAYER.setPosition((PLAYER.getPOS()[0], PLAYER.getPOS()[1]-PLAYER.getSPD()))
+
+            # else:
+            # if not PLAYER.IS_JUMPING and PLAYER.JUMPING_Y >= PLAYER.JUMP_HEIGHT:
+            #       PLAYER.fall()
+
+            # ANIMATION
+            TIME_ELAPSED += 1
+            if TIME_ELAPSED >= 25:
+                # NOT OUT OF SPRITES YET
+                if PLAYER.IMAGE_IND < len(PLAYER.IMAGES) - 1:
+                    PLAYER.IMAGE_IND += 1
+                else:
+                    PLAYER.IMAGE_IND = 0
+                # REPLACE SPRITE
+                PRESSED_KEYS = pygame.key.get_pressed()
+                PLAYER.setSprite(PRESSED_KEYS)
+                TIME_ELAPSED = 0
+
+
             LASER_HAND.bounceY(LASER_HAND.getHeight(), WINDOW.getHeight())
+
             WINDOW.ClearScreen()
+
+            ##### BOSS - BLIT BEFORE PLAYER #####
+            WINDOW.getSurface().blit(BOSS.getSurface(), BOSS.getPOS())
+            WINDOW.getSurface().blit(BOSS.BOSS_HEALTH_BAR.getSurface(), BOSS.BOSS_HEALTH_BAR.getPOS())
+            # PLAYER
+            WINDOW.getSurface().blit(PLAYER.getSurface(), PLAYER.getPOS())
+            # PLATFORM
+            WINDOW.getSurface().blit(PLATFORM.getSurface(), PLATFORM.getPOS())
+
             WINDOW.getSurface().blit(BUNNY.getSurface(), BUNNY.getPOS())
             WINDOW.getSurface().blit(FIRE_HAND.getSurface(), FIRE_HAND.getPOS())
             WINDOW.getSurface().blit(LASER.getSurface(), LASER.getPOS())
