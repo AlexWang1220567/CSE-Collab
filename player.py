@@ -147,7 +147,7 @@ if __name__ == "__main__":
 
         # ANIMATION
         TIME_ELAPSED += 1
-        if TIME_ELAPSED >= 100:
+        if TIME_ELAPSED >= 25:
             # NOT OUT OF SPRITES YET
             if PLAYER.IMAGE_IND < len(PLAYER.IMAGES) -1:
                 PLAYER.IMAGE_IND += 1
