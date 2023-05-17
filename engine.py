@@ -32,6 +32,8 @@ class Engine:
         self.__BG = BGSprite("sprite_images/shrubs.png")
 
         self.__BOSS = object
+        self.__BOSS_HEALTH_BAR = object
+
         self.__LASER_HAND = object
         self.__THUMB = object
         self.__FIRE_HAND = object
