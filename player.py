@@ -156,7 +156,6 @@ if __name__ == "__main__":
             # REPLACE SPRITE
             PRESSED_KEYS = pygame.key.get_pressed()
             PLAYER.setSprite(PRESSED_KEYS)
-            print(PLAYER.getFlip())
             TIME_ELAPSED = 0
 
 

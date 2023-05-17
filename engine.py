@@ -71,7 +71,8 @@ class Engine:
                 else:
                     self.__PLAYER.IMAGE_IND = 0
                 # REPLACE SPRITE
-                self.__PLAYER.setSprite()
+                PRESSED_KEYS = pygame.key.get_pressed()
+                self.__PLAYER.setSprite(PRESSED_KEYS)
                 self.__TIME_ELAPSED = 0
 
             # JUMP
