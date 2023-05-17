@@ -19,12 +19,26 @@ class Player(mySprite):
         self.__X_FLIP = False
         self.JUMPING_Y = 0
         self.IS_JUMPING = False
-        self.JUMP_HEIGHT = 120
+        self.JUMP_HEIGHT = 140
         self.__HEALTH = 100
         self.setSPD(5)
 
-    def setSprite(self):
+    def setSprite(self, KEYS_PRESSED):
         self._SURFACE = self.IMAGES[self.IMAGE_IND]
+        if KEYS_PRESSED[pygame.K_a]:
+            if self.__X_FLIP:
+                self.setFlipX()
+                self.__X_FLIP = False
+            else:
+                self.setFlipX()
+                self.__X_FLIP = True
+        if KEYS_PRESSED[pygame.K_d]:
+            if not self.__X_FLIP:
+                self.setFlipX()
+                self.__X_FLIP = True
+            else:
+                self.setFlipX()
+                self.__X_FLIP = False
 
     def setHealth(self, HEALTH):
         self.__HEALTH = HEALTH
@@ -100,10 +114,10 @@ if __name__ == "__main__":
 
     WINDOW = Window("Image Sprite Test")
     PLAYER = Player()
-    PLAYER.setScale(0.1)
+    #PLAYER.setScale(0.1)
 
     TIME_ELAPSED = 0
-    PLAYER.setSprite()
+
 
     # SPRITE CHANGE
     PLAYER.setFlipX()
@@ -130,28 +144,27 @@ if __name__ == "__main__":
             PLAYER.fall()
             #PLAYER.JUMPING_Y = 0
         PLAYER.checkBoundries(WINDOW.getWidth(), WINDOW.getHeight()-PLATFORM.getHeight())
+        # PLATFORM
+        if PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
+            PLAYER.JUMPING_Y = 0
+        #   PLAYER.setPosition((PLAYER.getPOS()[0], PLAYER.getPOS()[1]-PLAYER.getSPD()))
+
+        # else:
+        # if not PLAYER.IS_JUMPING and PLAYER.JUMPING_Y >= PLAYER.JUMP_HEIGHT:
+        #       PLAYER.fall()
 
         # ANIMATION
         TIME_ELAPSED += 1
-        if TIME_ELAPSED >= 250:
+        if TIME_ELAPSED >= 100:
             # NOT OUT OF SPRITES YET
             if PLAYER.IMAGE_IND < len(PLAYER.IMAGES) -1:
                 PLAYER.IMAGE_IND += 1
             else:
                 PLAYER.IMAGE_IND = 0
             # REPLACE SPRITE
-            PLAYER.setSprite()
+            PRESSED_KEYS = pygame.key.get_pressed()
+            PLAYER.setSprite(PRESSED_KEYS)
             TIME_ELAPSED = 0
-
-
-        # PLATFORM
-        if PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
-            PLAYER.JUMPING_Y = 0
-        #   PLAYER.setPosition((PLAYER.getPOS()[0], PLAYER.getPOS()[1]-PLAYER.getSPD()))
-
-        #else:
-            #if not PLAYER.IS_JUMPING and PLAYER.JUMPING_Y >= PLAYER.JUMP_HEIGHT:
-         #       PLAYER.fall()
 
 
 

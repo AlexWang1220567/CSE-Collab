@@ -36,16 +36,18 @@ class Engine:
         self.__THUMB = object
         self.__FIRE_HAND = object
 
+        self.__TIME_ELAPSED = 0
+
     def bossRoom(self):
 
         self.__WINDOW = Window("Image Sprite Test")
         self.__PLAYER = Player()
-        self.__PLAYER.setScale(0.1)
         self.__PLAYER.setFlipX()
         self.__PLAYER.setPosition((0, self.__WINDOW.getHeight() - self.__PLAYER.getHeight()))
 
         PLATFORM = Platform(30, self.__WINDOW.getWidth())
         PLATFORM.setPosition((0, self.__WINDOW.getHeight() - PLATFORM.getHeight()))
+        self.__TIME_ELAPSED = 0
 
         while True:
             ### INPUT
@@ -57,6 +59,19 @@ class Engine:
 
             ### PROCESSING
             self.__PLAYER.movePlayer(PRESSED_KEYS)
+
+            # ANIMATION
+            self.__TIME_ELAPSED += 1
+            if self.__TIME_ELAPSED >= 250:
+                # NOT OUT OF SPRITES YET
+                if self.__PLAYER.IMAGE_IND < len(self.__PLAYER.IMAGES) - 1:
+                    self.__PLAYER.IMAGE_IND += 1
+                else:
+                    self.__PLAYER.IMAGE_IND = 0
+                # REPLACE SPRITE
+                self.__PLAYER.setSprite()
+                self.__TIME_ELAPSED = 0
+
             # JUMP
             if self.__PLAYER.IS_JUMPING:
                 self.__PLAYER.jumpPlayer()
@@ -68,11 +83,6 @@ class Engine:
             # PLATFORM
             if self.__PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
                 self.__PLAYER.JUMPING_Y = 0
-            #   PLAYER.setPosition((PLAYER.getPOS()[0], PLAYER.getPOS()[1]-PLAYER.getSPD()))
-
-            # else:
-            # if not PLAYER.IS_JUMPING and PLAYER.JUMPING_Y >= PLAYER.JUMP_HEIGHT:
-            #       PLAYER.fall()
 
             ### OUTPUT
             self.__WINDOW.ClearScreen()
