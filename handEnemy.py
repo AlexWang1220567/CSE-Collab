@@ -182,10 +182,10 @@ class Hand_Engine:
         BOSS.BOSS_HEALTH_BAR.setPosition(
             (BOSS.getPOS()[0] + BOSS.BOSS_HEALTH_BAR.getWidth() // 2, BOSS.getPOS()[1] + 20))
         ##### MUSIC #####
-        pygame.mixer.pre_init(44100, -16, 2, 2048)  # setup mixer to avoid sound lag
-        pygame.mixer.init()
-        pygame.mixer.music.load('sprite_images/deathScene.mp3')
-        pygame.mixer.music.play(-1)
+        # pygame.mixer.pre_init(44100, -16, 2, 2048)  # setup mixer to avoid sound lag
+        # pygame.mixer.init()
+        # pygame.mixer.music.load('sprite_images/deathScene.mp3')
+        # pygame.mixer.music.play(-1)
 
 
 
@@ -199,13 +199,13 @@ class Hand_Engine:
         WINDOW = Window("Hand enemy Test")
         BUNNY = HandEnemy("sprite_images/thumb.png")
         FIRE_HAND = HandEnemy("sprite_images/fireHand.png")
-        LASER_HAND = HandEnemy("sprite_images/shrubs.png")
+        LASER_HAND = HandEnemy("sprite_images/laserHand.png")
         LASER = Laser("sprite_images/fire.png")
         LASER2 = Laser("sprite_images/fire.png")
         LASER_BEAM = Laser("sprite_images/laser (1).png")
 
         ### Set scales
-        LASER_HAND.setScale(0.125)
+        LASER_HAND.setScale(2.5)
         LASER.setScale(0.5)
         LASER2.setScale(0.5)
         BUNNY.setScale(1)
