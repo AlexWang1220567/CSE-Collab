@@ -19,7 +19,7 @@ class Player(mySprite):
         self.__X_FLIP = False
         self.JUMPING_Y = 0
         self.IS_JUMPING = False
-        self.JUMP_HEIGHT = 140
+        self.JUMP_HEIGHT = 160
         self.__HEALTH = 100
         self.setSPD(5)
 
@@ -55,8 +55,8 @@ class Player(mySprite):
     def jumpPlayer(self):
 
         if self.JUMPING_Y <= self.JUMP_HEIGHT:
-            self.JUMPING_Y += self._SPD +5
-            self._Y -= self._SPD +5
+            self.JUMPING_Y += self._SPD +10
+            self._Y -= self._SPD +10
         else:
             self.IS_JUMPING = False
             self.fall()
