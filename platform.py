@@ -14,6 +14,23 @@ class Platform(mySprite):
         self._SURFACE = pygame.Surface(self._DIM, pygame.SRCALPHA, 32)
         self._SURFACE.fill(self._COLOR)
 
+class PlatfromPlacement():
+    def __init__(self):
+        pass
+
+    def placement(self, PLATFORMS, WINDOW):
+        for i in PLATFORMS:
+            for x in range(3):
+                print(x)
+                for j in range(2):
+                    print(j)
+                    i.setPoistion(
+                        (
+                            (50 + (100 * j)),
+                            (50 + (100 * x))
+                        )
+                    )
+
 
 if __name__ == "__main__":
 
@@ -22,14 +39,21 @@ if __name__ == "__main__":
     pygame.init()
 
     WINDOW = Window("Image Sprite Test")
-    PLATFORM = Platform(30, WINDOW.getWidth())
-
-    PLATFORM.setPosition((0, WINDOW.getHeight()-PLATFORM.getHeight()))
-
     PLATFORMS = []
-    PLATFORM_2 = Platform(100, 100)
-    #PLATFORM_2.setPosition(())
-    PLATFORM.setColor((200, 200, 200))
+    for i in range(6):
+        PLATFORMS.append(Platform(25, 150))
+    PLATFORM = -1
+    for x in range(3):
+        print(x)
+        for j in range(2):
+            print(j)
+            PLATFORM += 1
+            PLATFORMS[PLATFORM].setPosition(
+                (
+                    (100 + (300 * j)),
+                    (50 + (150 * x))
+                )
+            )
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -39,5 +63,6 @@ if __name__ == "__main__":
 
 
         WINDOW.ClearScreen()
-        WINDOW.getSurface().blit(PLATFORM.getSurface(), PLATFORM.getPOS())
+        for platform in PLATFORMS:
+            WINDOW.getSurface().blit(platform.getSurface(), platform.getPOS())
         WINDOW.updateFrames()
