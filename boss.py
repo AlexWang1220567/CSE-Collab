@@ -74,6 +74,7 @@ if __name__ == "__main__":
     TIME_ELAPSED = 0
 
 
+
     # SPRITE CHANGE
     PLAYER.setFlipX()
     PLAYER.setPosition((0, WINDOW.getHeight()-PLAYER.getHeight()))
