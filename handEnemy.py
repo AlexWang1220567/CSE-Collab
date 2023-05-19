@@ -202,16 +202,17 @@ class Hand_Engine:
         LASER_HAND = HandEnemy("sprite_images/laserHand.png")
         LASER = Laser("sprite_images/fire.png")
         LASER2 = Laser("sprite_images/fire.png")
-        LASER_BEAM = Laser("sprite_images/laser (1).png")
+        LASER_BEAM = Laser("sprite_images/laserBeam.png")
 
         ### Set scales
-        LASER_HAND.setScale(2.5)
+        LASER_HAND.setScale(2.7)
         LASER.setScale(0.5)
         LASER2.setScale(0.5)
+        LASER_BEAM.setScale(2)
         BUNNY.setScale(1)
 
         ### Set SPD
-        LASER_HAND.setSPD(10)
+        LASER_HAND.setSPD(5)
         LASER.setSPD(15)
         LASER.setSPD_Y(8)
         LASER2.setSPD(15)
