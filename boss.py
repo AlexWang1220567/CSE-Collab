@@ -92,7 +92,7 @@ if __name__ == "__main__":
     ##### MUSIC #####
     pygame.mixer.pre_init(44100, -16, 2, 2048)  # setup mixer to avoid sound lag
     pygame.mixer.init()
-    pygame.mixer.music.load('sprite_images/deathScene.mp3')
+    pygame.mixer.music.load('sound_effects/deathScene.mp3')
     pygame.mixer.music.play(-1)
 
     while True:

@@ -78,11 +78,11 @@ class HandEnemy(mySprite):
             )
         )
 
-    def setFireHand(self, WINDOW):
+    def setFireHand(self, WINDOW, GROUND):
         self.setPosition(
             (
                 WINDOW.getWidth()//2 - self.getWidth()//2,
-                WINDOW.getHeight() - self.getHeight()
+                WINDOW.getHeight() - self.getHeight() - GROUND
             )
         )
 
@@ -213,9 +213,9 @@ class Hand_Engine:
 
         ### Set SPD
         LASER_HAND.setSPD(5)
-        LASER.setSPD(15)
+        LASER.setSPD(10)
         LASER.setSPD_Y(8)
-        LASER2.setSPD(15)
+        LASER2.setSPD(10)
         LASER2.setSPD_Y(8)
         BUNNY.setSPD(15)
         LASER_BEAM.setSPD(30)
@@ -232,7 +232,7 @@ class Hand_Engine:
         LASER_BEAM.setFlipX()
 
         ### Set POS
-        FIRE_HAND.setFireHand(WINDOW)
+        FIRE_HAND.setFireHand(WINDOW, PLATFORM.getHeight())
         LASER.resetLaserPOS(FIRE_HAND)
         LASER2.resetLaserPOS(FIRE_HAND)
         BUNNY.setPosition(
@@ -291,6 +291,7 @@ class Hand_Engine:
                     )
 
             ### PROCESSING
+            PLAYER.WALK_TIME_ELAPSED += 1
             PLAYER.movePlayer(PRESSED_KEYS)
             # JUMP
             if PLAYER.IS_JUMPING:
@@ -308,18 +309,18 @@ class Hand_Engine:
             # if not PLAYER.IS_JUMPING and PLAYER.JUMPING_Y >= PLAYER.JUMP_HEIGHT:
             #       PLAYER.fall()
 
-            # ANIMATION
-            TIME_ELAPSED += 1
-            if TIME_ELAPSED >= 25:
-                # NOT OUT OF SPRITES YET
-                if PLAYER.IMAGE_IND < len(PLAYER.IMAGES) - 1:
-                    PLAYER.IMAGE_IND += 1
-                else:
-                    PLAYER.IMAGE_IND = 0
-                # REPLACE SPRITE
-                PRESSED_KEYS = pygame.key.get_pressed()
-                PLAYER.setSprite(PRESSED_KEYS)
-                TIME_ELAPSED = 0
+            # # ANIMATION
+            # TIME_ELAPSED += 1
+            # if TIME_ELAPSED >= 25:
+            #     # NOT OUT OF SPRITES YET
+            #     if PLAYER.IMAGE_IND < len(PLAYER.IMAGES) - 1:
+            #         PLAYER.IMAGE_IND += 1
+            #     else:
+            #         PLAYER.IMAGE_IND = 0
+            #     # REPLACE SPRITE
+            #     PRESSED_KEYS = pygame.key.get_pressed()
+            #     PLAYER.setSprite(PRESSED_KEYS)
+            #     TIME_ELAPSED = 0
 
 
             LASER_HAND.bounceY(LASER_HAND.getHeight(), WINDOW.getHeight())

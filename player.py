@@ -12,22 +12,37 @@ class Player(mySprite):
     def __init__(self):
         mySprite.__init__(self)
         self.IMAGES = []
-        self.IMAGES.append(pygame.image.load("sprite_images/fireHand.png").convert_alpha())
-        self.IMAGES.append(pygame.image.load("sprite_images/thumb.png").convert_alpha())
+        self.IMAGES.append(pygame.image.load("sprite_images/player_walk_1.png").convert_alpha())
+        self.IMAGES.append(pygame.image.load("sprite_images/player_walk_2 (1).png").convert_alpha())
         self.IMAGE_IND = 0
         self._SURFACE = self.IMAGES[self.IMAGE_IND]
         self.__X_FLIP = False
         self.JUMPING_Y = 0
         self.IS_JUMPING = False
-        self.JUMP_HEIGHT = 160
+        self.JUMP_HEIGHT = 230
         self.__HEALTH = 100
-        self.setSPD(5)
+        self.setSPD(10)
+
+        self.WALK_TIME_ELAPSED = 0
 
     def setSprite(self, KEYS_PRESSED):
-        self._SURFACE = self.IMAGES[self.IMAGE_IND]
-        if KEYS_PRESSED[pygame.K_a]:
 
-            self.__X_FLIP = True
+        if self.WALK_TIME_ELAPSED >= 20:
+
+            # NOT OUT OF SPRITES YET
+            if self.IMAGE_IND < len(self.IMAGES) - 1:
+                self.IMAGE_IND += 1
+            else:
+                self.IMAGE_IND = 0
+            # REPLACE SPRITE
+
+            self._SURFACE = self.IMAGES[self.IMAGE_IND]
+            if KEYS_PRESSED[pygame.K_a]:
+                self.__X_FLIP = True
+
+
+
+            self.WALK_TIME_ELAPSED = 0
 
 
     def deductHealth(self, DAMAGE):
@@ -41,11 +56,13 @@ class Player(mySprite):
             if self.__X_FLIP:
                 self.setFlipX()
                 self.__X_FLIP = False
+            self.setSprite(KEYS_PRESSED)
         if KEYS_PRESSED[pygame.K_d]:
             self._X += self._SPD
             if not self.__X_FLIP:
                 self.setFlipX()
                 self.__X_FLIP = True
+            self.setSprite(KEYS_PRESSED)
         ### JUMPING
         if KEYS_PRESSED[pygame.K_SPACE] and self.JUMPING_Y == 0:
             self.IS_JUMPING = True
@@ -128,6 +145,7 @@ if __name__ == "__main__":
         PRESSED_KEYS = pygame.key.get_pressed()
 
         ### PROCESSING
+        PLAYER.WALK_TIME_ELAPSED += 1
         PLAYER.movePlayer(PRESSED_KEYS)
         # JUMP
         if PLAYER.IS_JUMPING:
@@ -146,17 +164,17 @@ if __name__ == "__main__":
         #       PLAYER.fall()
 
         # ANIMATION
-        TIME_ELAPSED += 1
-        if TIME_ELAPSED >= 25:
-            # NOT OUT OF SPRITES YET
-            if PLAYER.IMAGE_IND < len(PLAYER.IMAGES) -1:
-                PLAYER.IMAGE_IND += 1
-            else:
-                PLAYER.IMAGE_IND = 0
-            # REPLACE SPRITE
-            PRESSED_KEYS = pygame.key.get_pressed()
-            PLAYER.setSprite(PRESSED_KEYS)
-            TIME_ELAPSED = 0
+        # PLAYER.WALK_TIME_ELAPSED += 1
+        # if TIME_ELAPSED >= 15:
+        #     # NOT OUT OF SPRITES YET
+        #     if PLAYER.IMAGE_IND < len(PLAYER.IMAGES) -1:
+        #         PLAYER.IMAGE_IND += 1
+        #     else:
+        #         PLAYER.IMAGE_IND = 0
+        #     # REPLACE SPRITE
+        # PRESSED_KEYS = pygame.key.get_pressed()
+        # PLAYER.setSprite(PRESSED_KEYS)
+        # TIME_ELAPSED = 0
 
 
 
