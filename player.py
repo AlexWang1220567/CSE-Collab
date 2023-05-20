@@ -13,7 +13,9 @@ class Player(mySprite):
         mySprite.__init__(self)
         self.IMAGES = []
         self.IMAGES.append(pygame.image.load("sprite_images/player_walk_1.png").convert_alpha())
+        self.IMAGES.append(pygame.image.load("sprite_images/player_walk_3.png").convert_alpha())
         self.IMAGES.append(pygame.image.load("sprite_images/player_walk_2 (1).png").convert_alpha())
+        self.IMAGES.append(pygame.image.load("sprite_images/player_walk_3.png").convert_alpha())
         self.IMAGE_IND = 0
         self._SURFACE = self.IMAGES[self.IMAGE_IND]
         self.__X_FLIP = False
@@ -27,7 +29,7 @@ class Player(mySprite):
 
     def setSprite(self, KEYS_PRESSED):
 
-        if self.WALK_TIME_ELAPSED >= 20:
+        if self.WALK_TIME_ELAPSED >= 10:
 
             # NOT OUT OF SPRITES YET
             if self.IMAGE_IND < len(self.IMAGES) - 1:
@@ -72,8 +74,8 @@ class Player(mySprite):
     def jumpPlayer(self):
 
         if self.JUMPING_Y <= self.JUMP_HEIGHT:
-            self.JUMPING_Y += self._SPD +10
-            self._Y -= self._SPD +10
+            self.JUMPING_Y += self._SPD + 5
+            self._Y -= self._SPD + 5
         else:
             self.IS_JUMPING = False
             self.fall()

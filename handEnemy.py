@@ -146,6 +146,10 @@ class Laser(mySprite):
         self._SPD_Y = SPD
 
     def shootLaser(self, HAND):
+        # pygame.mixer.pre_init(44100, -16, 2, 2048)
+        # pygame.mixer.init()
+        # pygame.mixer.music.load('sound_effects/laser-zap-90575.mp3')
+        # pygame.mixer.music.play(1)
         self._X += self._SPD * self._DIR_X
         self.setPosition((self._X, self._Y))
 
@@ -275,6 +279,12 @@ class Hand_Engine:
             LASER.laserMovment()
             if LASER.getPOS()[0] > WINDOW.getWidth():
                 LASER.resetLaserPOS(FIRE_HAND)
+                #####
+                # pygame.mixer.pre_init(44100, -16, 2, 2048)
+                # pygame.mixer.init()
+                # pygame.mixer.music.load('sound_effects/short-fireball-woosh-6146.mp3')
+                # pygame.mixer.music.play(1)
+                #####
             LASER2.laserMovment()
             if LASER2.getPOS()[0] < 0:
                 LASER2.resetLaserPOS(FIRE_HAND)
@@ -282,6 +292,12 @@ class Hand_Engine:
             if time_since_laser > 30:
                 LASER_BEAM.shootLaser(LASER_HAND)
                 if LASER_BEAM.getPOS()[0] < (0 - LASER_BEAM.getWidth()):
+                    ######
+                    pygame.mixer.pre_init(44100, -16, 2, 2048)
+                    pygame.mixer.init()
+                    pygame.mixer.music.load('sound_effects/laser-zap-90575.mp3')
+                    pygame.mixer.music.play(1)
+                    ######
                     time_since_laser = 0
                     LASER_BEAM.setPosition(
                         (
