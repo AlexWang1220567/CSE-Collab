@@ -12,16 +12,19 @@ class Player(mySprite):
     def __init__(self):
         mySprite.__init__(self)
         self.IMAGES = []
-        self.IMAGES.append(pygame.image.load("sprite_images/player_walk_1.png").convert_alpha())
-        self.IMAGES.append(pygame.image.load("sprite_images/player_walk_3.png").convert_alpha())
-        self.IMAGES.append(pygame.image.load("sprite_images/player_walk_2 (1).png").convert_alpha())
-        self.IMAGES.append(pygame.image.load("sprite_images/player_walk_3.png").convert_alpha())
+        # self.IMAGES.append(pygame.image.load("sprite_images/player_walk_1.png").convert_alpha())
+        # self.IMAGES.append(pygame.image.load("sprite_images/player_walk_3.png").convert_alpha())
+        # self.IMAGES.append(pygame.image.load("sprite_images/player_walk_2.png").convert_alpha())
+        # self.IMAGES.append(pygame.image.load("sprite_images/player_walk_3.png").convert_alpha())
+        self.IMAGES.append(pygame.image.load("sprite_images/walk_1.png").convert_alpha())
+        self.IMAGES.append(pygame.image.load("sprite_images/walk_2.png").convert_alpha())
+
         self.IMAGE_IND = 0
         self._SURFACE = self.IMAGES[self.IMAGE_IND]
         self.__X_FLIP = False
         self.JUMPING_Y = 0
         self.IS_JUMPING = False
-        self.JUMP_HEIGHT = 230
+        self.__JUMP_HEIGHT = 230
         self.__HEALTH = 100
         self.setSPD(10)
 
@@ -52,18 +55,17 @@ class Player(mySprite):
 
     def movePlayer(self, KEYS_PRESSED):
 
-
         if KEYS_PRESSED[pygame.K_a]:
             self._X -= self._SPD
             if self.__X_FLIP:
                 self.setFlipX()
                 self.__X_FLIP = False
             self.setSprite(KEYS_PRESSED)
-        if KEYS_PRESSED[pygame.K_d]:
+        elif KEYS_PRESSED[pygame.K_d]:
             self._X += self._SPD
-            if not self.__X_FLIP:
-                self.setFlipX()
-                self.__X_FLIP = True
+            # if not self.__X_FLIP:
+            #     self.setFlipX()
+            #     self.__X_FLIP = True
             self.setSprite(KEYS_PRESSED)
         ### JUMPING
         if KEYS_PRESSED[pygame.K_SPACE] and self.JUMPING_Y == 0:
@@ -73,7 +75,7 @@ class Player(mySprite):
 
     def jumpPlayer(self):
 
-        if self.JUMPING_Y <= self.JUMP_HEIGHT:
+        if self.JUMPING_Y <= self.__JUMP_HEIGHT:
             self.JUMPING_Y += self._SPD + 5
             self._Y -= self._SPD + 5
         else:
