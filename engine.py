@@ -8,7 +8,7 @@ from platform import Platform
 from player import Player
 from window import Window
 from text import Text
-from bg_sprite import BGSprite
+from imageSprite import ImageSprite
 
 
 class Engine:
@@ -29,7 +29,7 @@ class Engine:
         self.__GROUND.setPosition((0, self.__WINDOW.getHeight()))
 
         self.__PLATFORMS = []
-        self.__BG = BGSprite("sprite_images/shrubs.png")
+        self.__BG = ImageSprite("sprite_images/shrubs.png")
 
         self.__BOSS = object
         self.__BOSS_HEALTH_BAR = object

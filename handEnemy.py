@@ -260,6 +260,23 @@ class Hand_Engine:
         )
 
 
+        PLATFORMS = []
+        for i in range(6):
+            PLATFORMS.append(Platform(25, 150))
+        PLATFORM_COUNTER = -1
+        for x in range(3):
+            print(x)
+            for j in range(2):
+                print(j)
+                PLATFORM_COUNTER += 1
+                PLATFORMS[PLATFORM_COUNTER].setPosition(
+                    (
+                        (200 + (300 * j)),
+                        (100 + (170 * x))
+                    )
+                )
+
+
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -292,12 +309,12 @@ class Hand_Engine:
             if time_since_laser > 30:
                 LASER_BEAM.shootLaser(LASER_HAND)
                 if LASER_BEAM.getPOS()[0] < (0 - LASER_BEAM.getWidth()):
-                    ######
-                    pygame.mixer.pre_init(44100, -16, 2, 2048)
-                    pygame.mixer.init()
-                    pygame.mixer.music.load('sound_effects/laser-zap-90575.mp3')
-                    pygame.mixer.music.play(1)
-                    ######
+                    # ######
+                    # pygame.mixer.pre_init(44100, -16, 2, 2048)
+                    # pygame.mixer.init()
+                    # pygame.mixer.music.load('sound_effects/laser-zap-90575.mp3')
+                    # pygame.mixer.music.play(1)
+                    # ######
                     time_since_laser = 0
                     LASER_BEAM.setPosition(
                         (
@@ -312,11 +329,18 @@ class Hand_Engine:
             # JUMP
             if PLAYER.IS_JUMPING:
                 PLAYER.jumpPlayer()
+                PLAYER.ATTACK_EFFECT.setPosition((PLAYER.getPOS()[0] + PLAYER.getWidth(), PLAYER.getPOS()[1]))
             else:
                 PLAYER.fall()
-                # PLAYER.JUMPING_Y = 0
+                PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
             PLAYER.checkBoundries(WINDOW.getWidth(), WINDOW.getHeight() - PLATFORM.getHeight())
             # PLATFORM
+            for platform in PLATFORMS:
+                if PLAYER.isSpriteColliding(platform.getPOS(), platform.getDiminsoins()):
+                    # PLAYER.fall()
+                    PLAYER.JUMPING_Y = 0
+                    PLAYER.IS_JUMPING = False
+                    # PLAYER.setPosition((PLAYER.getPOS()[0], platform.getPOS()[1]-platform.getHeight()))
             if PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
                 PLAYER.JUMPING_Y = 0
             #   PLAYER.setPosition((PLAYER.getPOS()[0], PLAYER.getPOS()[1]-PLAYER.getSPD()))
@@ -349,7 +373,11 @@ class Hand_Engine:
             # PLAYER
             WINDOW.getSurface().blit(PLAYER.getSurface(), PLAYER.getPOS())
             # PLATFORM
+            for platform in PLATFORMS:
+                WINDOW.getSurface().blit(platform.getSurface(), platform.getPOS())
             WINDOW.getSurface().blit(PLATFORM.getSurface(), PLATFORM.getPOS())
+            # ATTACK EFFECT
+            WINDOW.getSurface().blit(PLAYER.ATTACK_EFFECT.getSurface(), PLAYER.ATTACK_EFFECT.getPOS())
 
             WINDOW.getSurface().blit(BUNNY.getSurface(), BUNNY.getPOS())
             WINDOW.getSurface().blit(FIRE_HAND.getSurface(), FIRE_HAND.getPOS())
@@ -357,6 +385,7 @@ class Hand_Engine:
             WINDOW.getSurface().blit(LASER2.getSurface(), LASER2.getPOS())
             WINDOW.getSurface().blit(LASER_BEAM.getSurface(), LASER_BEAM.getPOS())
             WINDOW.getSurface().blit(LASER_HAND.getSurface(), LASER_HAND.getPOS())
+
             WINDOW.updateFrames()
 
 if __name__ == "__main__":

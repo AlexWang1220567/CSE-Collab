@@ -5,6 +5,7 @@ date-created: 05/10/2023
 """
 
 from mySprite import mySprite
+from imageSprite import ImageSprite
 import pygame
 
 class Player(mySprite):
@@ -16,7 +17,9 @@ class Player(mySprite):
         # self.IMAGES.append(pygame.image.load("sprite_images/player_walk_3.png").convert_alpha())
         # self.IMAGES.append(pygame.image.load("sprite_images/player_walk_2.png").convert_alpha())
         # self.IMAGES.append(pygame.image.load("sprite_images/player_walk_3.png").convert_alpha())
+        self.IMAGES.append(pygame.image.load("sprite_images/walk_3.png").convert_alpha())
         self.IMAGES.append(pygame.image.load("sprite_images/walk_1.png").convert_alpha())
+        self.IMAGES.append(pygame.image.load("sprite_images/walk_3.png").convert_alpha())
         self.IMAGES.append(pygame.image.load("sprite_images/walk_2.png").convert_alpha())
 
         self.IMAGE_IND = 0
@@ -24,6 +27,12 @@ class Player(mySprite):
         self.__X_FLIP = False
         self.JUMPING_Y = 0
         self.IS_JUMPING = False
+
+        self.ATTACK_SPRITE = pygame.image.load("sprite_images/attack.png").convert_alpha()
+        self.ATTACK_EFFECT = ImageSprite("sprite_images/cut.png")
+        self.ATTACK_EFFECT.setPosition((5000,5000))
+        # self.ATTACK_EFFECT.append(pygame.image.load("sprite_images/cut.png").convert_alpha())
+
         self.__JUMP_HEIGHT = 230
         self.__HEALTH = 100
         self.setSPD(10)
@@ -32,7 +41,7 @@ class Player(mySprite):
 
     def setSprite(self, KEYS_PRESSED):
 
-        if self.WALK_TIME_ELAPSED >= 10:
+        if self.WALK_TIME_ELAPSED >= 20:
 
             # NOT OUT OF SPRITES YET
             if self.IMAGE_IND < len(self.IMAGES) - 1:
@@ -55,13 +64,14 @@ class Player(mySprite):
 
     def movePlayer(self, KEYS_PRESSED):
 
-        if KEYS_PRESSED[pygame.K_a]:
+        if KEYS_PRESSED[pygame.K_a] and not self.IS_JUMPING:
             self._X -= self._SPD
+            self.setSprite(KEYS_PRESSED)
             if self.__X_FLIP:
                 self.setFlipX()
                 self.__X_FLIP = False
-            self.setSprite(KEYS_PRESSED)
-        elif KEYS_PRESSED[pygame.K_d]:
+
+        if KEYS_PRESSED[pygame.K_d] and not self.IS_JUMPING:
             self._X += self._SPD
             # if not self.__X_FLIP:
             #     self.setFlipX()
@@ -69,7 +79,11 @@ class Player(mySprite):
             self.setSprite(KEYS_PRESSED)
         ### JUMPING
         if KEYS_PRESSED[pygame.K_SPACE] and self.JUMPING_Y == 0:
+            self._SURFACE = self.ATTACK_SPRITE
+            if self.__X_FLIP:
+                self.setFlipX()
             self.IS_JUMPING = True
+
 
         self.setPosition((self._X, self._Y))
 
@@ -154,8 +168,10 @@ if __name__ == "__main__":
         # JUMP
         if PLAYER.IS_JUMPING:
             PLAYER.jumpPlayer()
+            PLAYER.ATTACK_EFFECT.setPosition((PLAYER.getPOS()[0]+PLAYER.getWidth(), PLAYER.getPOS()[1]))
         else:
             PLAYER.fall()
+            PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
             #PLAYER.JUMPING_Y = 0
         PLAYER.checkBoundries(WINDOW.getWidth(), WINDOW.getHeight()-PLATFORM.getHeight())
         # PLATFORM
@@ -186,6 +202,7 @@ if __name__ == "__main__":
         WINDOW.ClearScreen()
         WINDOW.getSurface().blit(PLAYER.getSurface(), PLAYER.getPOS())
         WINDOW.getSurface().blit(PLATFORM.getSurface(), PLATFORM.getPOS())
+        WINDOW.getSurface().blit(PLAYER.ATTACK_EFFECT.getSurface(), PLAYER.ATTACK_EFFECT.getPOS())
         WINDOW.updateFrames()
 
 
