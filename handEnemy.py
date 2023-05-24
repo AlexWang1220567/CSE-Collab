@@ -261,6 +261,8 @@ class Hand_Engine:
 
 
         PLATFORMS = []
+
+
         for i in range(6):
             PLATFORMS.append(Platform(25, 150))
         PLATFORM_COUNTER = -1
@@ -326,21 +328,29 @@ class Hand_Engine:
             ### PROCESSING
             PLAYER.WALK_TIME_ELAPSED += 1
             PLAYER.movePlayer(PRESSED_KEYS)
+            COLLIDING_PLATFORM = 0
             # JUMP
             if PLAYER.IS_JUMPING:
                 PLAYER.jumpPlayer()
                 PLAYER.ATTACK_EFFECT.setPosition((PLAYER.getPOS()[0] + PLAYER.getWidth(), PLAYER.getPOS()[1]))
             else:
-                PLAYER.fall()
-                PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
+                for platform in PLATFORMS:
+                    if PLAYER.isSpriteColliding(platform.getPOS(), platform.getDiminsoins()):
+                        PLAYER.JUMPING_Y = 0
+                        PLAYER.IS_JUMPING = False
+                        COLLIDING_PLATFORM += 1
+                if COLLIDING_PLATFORM == 0:
+                    PLAYER.fall()
+                    PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
             PLAYER.checkBoundries(WINDOW.getWidth(), WINDOW.getHeight() - PLATFORM.getHeight())
             # PLATFORM
-            for platform in PLATFORMS:
-                if PLAYER.isSpriteColliding(platform.getPOS(), platform.getDiminsoins()):
-                    # PLAYER.fall()
-                    PLAYER.JUMPING_Y = 0
-                    PLAYER.IS_JUMPING = False
-                    # PLAYER.setPosition((PLAYER.getPOS()[0], platform.getPOS()[1]-platform.getHeight()))
+            # for platform in PLATFORMS:
+            #     if PLAYER.isSpriteColliding(platform.getPOS(), platform.getDiminsoins()):
+            #         if not PLAYER.IS_JUMPING:
+            #             # PLAYER.fall()
+            #             PLAYER.JUMPING_Y = 0
+            #             PLAYER.IS_JUMPING = False
+                        # PLAYER.setPosition((PLAYER.getPOS()[0], platform.getPOS()[1]-platform.getHeight()))
             if PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
                 PLAYER.JUMPING_Y = 0
             #   PLAYER.setPosition((PLAYER.getPOS()[0], PLAYER.getPOS()[1]-PLAYER.getSPD()))
