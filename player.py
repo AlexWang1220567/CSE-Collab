@@ -34,7 +34,17 @@ class Player(mySprite):
         # self.ATTACK_EFFECT.append(pygame.image.load("sprite_images/cut.png").convert_alpha())
 
         self.__JUMP_HEIGHT = 230
-        self.__HEALTH = 100
+
+        ####################
+        self.HEALTH_BAR = []
+        for i in range(6):
+            BAR = Platform(15, 10)
+            BAR.setColor((250, 0, 0))
+            self.HEALTH_BAR.append(BAR)
+        ####################
+
+
+
         self.setSPD(10)
 
         self.WALK_TIME_ELAPSED = 0
@@ -58,9 +68,6 @@ class Player(mySprite):
 
             self.WALK_TIME_ELAPSED = 0
 
-
-    def deductHealth(self, DAMAGE):
-        self.__HEALTH -= DAMAGE
 
     def movePlayer(self, KEYS_PRESSED):
 
@@ -136,11 +143,6 @@ class Player(mySprite):
             pass
 
 
-
-
-    def getHealth(self):
-        return self.__HEALTH
-
     def getSPD(self):
         return self._SPD
     def getFlip(self):
@@ -164,8 +166,14 @@ if __name__ == "__main__":
     PLAYER.setFlipX()
     PLAYER.setPosition((0, WINDOW.getHeight()-PLAYER.getHeight()))
 
-    PLATFORM = Platform(30, WINDOW.getWidth())
+    PLATFORM = Platform(50, WINDOW.getWidth())
     PLATFORM.setPosition((0, WINDOW.getHeight()-PLATFORM.getHeight()))
+
+    ###################
+    BAR_COUNT = 0
+    for bar in PLAYER.HEALTH_BAR:
+        bar.setPosition((BAR_COUNT*30, WINDOW.getHeight()-bar.getHeight()-20))
+        BAR_COUNT += 1
 
 
     while True:
@@ -191,24 +199,7 @@ if __name__ == "__main__":
         # PLATFORM
         if PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
             PLAYER.JUMPING_Y = 0
-        #   PLAYER.setPosition((PLAYER.getPOS()[0], PLAYER.getPOS()[1]-PLAYER.getSPD()))
 
-        # else:
-        # if not PLAYER.IS_JUMPING and PLAYER.JUMPING_Y >= PLAYER.JUMP_HEIGHT:
-        #       PLAYER.fall()
-
-        # ANIMATION
-        # PLAYER.WALK_TIME_ELAPSED += 1
-        # if TIME_ELAPSED >= 15:
-        #     # NOT OUT OF SPRITES YET
-        #     if PLAYER.IMAGE_IND < len(PLAYER.IMAGES) -1:
-        #         PLAYER.IMAGE_IND += 1
-        #     else:
-        #         PLAYER.IMAGE_IND = 0
-        #     # REPLACE SPRITE
-        # PRESSED_KEYS = pygame.key.get_pressed()
-        # PLAYER.setSprite(PRESSED_KEYS)
-        # TIME_ELAPSED = 0
 
 
 
@@ -217,6 +208,9 @@ if __name__ == "__main__":
         WINDOW.getSurface().blit(PLAYER.getSurface(), PLAYER.getPOS())
         WINDOW.getSurface().blit(PLATFORM.getSurface(), PLATFORM.getPOS())
         WINDOW.getSurface().blit(PLAYER.ATTACK_EFFECT.getSurface(), PLAYER.ATTACK_EFFECT.getPOS())
+        ###################
+        for health_bar in PLAYER.HEALTH_BAR:
+            WINDOW.getSurface().blit(health_bar.getSurface(), health_bar.getPOS())
         WINDOW.updateFrames()
 
 
