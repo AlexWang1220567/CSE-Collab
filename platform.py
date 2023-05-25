@@ -35,6 +35,8 @@ class PlatfromPlacement():
 if __name__ == "__main__":
 
     from window import Window
+    from boss import Boss
+    from imageSprite import ImageSprite
 
     pygame.init()
 
@@ -42,18 +44,28 @@ if __name__ == "__main__":
     PLATFORMS = []
     for i in range(6):
         PLATFORMS.append(Platform(25, 150))
-    PLATFORM = -1
+    PLATFORM_COUNTER = -1
     for x in range(3):
         print(x)
         for j in range(2):
             print(j)
-            PLATFORM += 1
-            PLATFORMS[PLATFORM].setPosition(
+            PLATFORM_COUNTER += 1
+            PLATFORMS[PLATFORM_COUNTER].setPosition(
                 (
-                    (100 + (300 * j)),
-                    (50 + (150 * x))
+                    (200 + (300 * j)),
+                    (100 + (170 * x))
                 )
             )
+
+    PLAYER = Player()
+    # PLAYER.setScale(0.1)
+
+    TIME_ELAPSED = 0
+
+    # SPRITE CHANGE
+    PLAYER.setFlipX()
+    PLAYER.setPosition((0, WINDOW.getHeight() - PLAYER.getHeight()))
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
