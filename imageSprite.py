@@ -25,6 +25,21 @@ class ImageSprite(mySprite):
         """
         self._SURFACE = pygame.transform.flip(self._SURFACE, True, False)
 
+    def setScale(self, SCALE_X, SCALE_Y=0):
+        """
+        Resize the image based on a factor
+        :param SCALE_X: float
+        :param SCALE_Y: float
+        :return: None
+        """
+
+        if SCALE_Y == 0:
+            SCALE_Y = SCALE_X
+        self._SURFACE = pygame.transform.scale(
+            self._SURFACE,
+            (self.getWidth()*SCALE_X, self.getHeight()*SCALE_Y)
+        )
+
 if __name__ == "__main__":
 
     pygame.init()

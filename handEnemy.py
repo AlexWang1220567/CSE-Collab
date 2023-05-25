@@ -162,6 +162,7 @@ class Hand_Engine:
         from window import Window
         from platform import Platform
         from boss import Boss
+        from imageSprite import ImageSprite
         pygame.init()
 
         WINDOW = Window("Image Sprite Test")
@@ -259,6 +260,9 @@ class Hand_Engine:
             )
         )
 
+        BG = ImageSprite("sprite_images/BG.png")
+        BG.setScale(0.625, 0.58)
+        #BG.setPosition((0, 0))
 
         PLATFORMS = []
 
@@ -376,6 +380,9 @@ class Hand_Engine:
             LASER_HAND.bounceY(LASER_HAND.getHeight(), WINDOW.getHeight())
 
             WINDOW.ClearScreen()
+
+            ### BG
+            WINDOW.getSurface().blit(BG.getSurface(), BG.getPOS())
 
             ##### BOSS - BLIT BEFORE PLAYER #####
             WINDOW.getSurface().blit(BOSS.getSurface(), BOSS.getPOS())
