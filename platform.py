@@ -14,6 +14,18 @@ class Platform(mySprite):
         self._SURFACE = pygame.Surface(self._DIM, pygame.SRCALPHA, 32)
         self._SURFACE.fill(self._COLOR)
 
+    def isCollidingPlatform(self, POSITION, DIMINSION):
+        SPRITE_X = POSITION[0]
+        SPRITE_Y = POSITION[1]
+        SPRITE_W = DIMINSION[0]
+        SPRITE_H = DIMINSION[1]
+
+        if SPRITE_X >= self._X - SPRITE_W and SPRITE_X <= self._X + self.getWidth():
+            if SPRITE_Y >= self._Y - SPRITE_H and SPRITE_Y <= self._Y + self.getHeight():
+                return True
+        return False
+
+
 class PlatfromPlacement():
     def __init__(self):
         pass
@@ -32,9 +44,11 @@ class PlatfromPlacement():
                     )
 
 
+
 if __name__ == "__main__":
 
     from window import Window
+    from player import Player
     from boss import Boss
     from imageSprite import ImageSprite
 
@@ -66,6 +80,9 @@ if __name__ == "__main__":
     PLAYER.setFlipX()
     PLAYER.setPosition((0, WINDOW.getHeight() - PLAYER.getHeight()))
 
+    PLATFORM = Platform(40, WINDOW.getWidth())
+    PLATFORM.setPosition((0, WINDOW.getHeight() - PLATFORM.getHeight()))
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -73,8 +90,35 @@ if __name__ == "__main__":
                 quit()
         PRESSED_KEYS = pygame.key.get_pressed()
 
+        ### PROCESSING
+        PLAYER.WALK_TIME_ELAPSED += 1
+        PLAYER.movePlayer(PRESSED_KEYS)
+        COLLIDING_PLATFORM = 0
+        # JUMP
+        if PLAYER.IS_JUMPING:
+            PLAYER.jumpPlayer()
+            PLAYER.ATTACK_EFFECT.setPosition((PLAYER.getPOS()[0] + PLAYER.getWidth(), PLAYER.getPOS()[1]))
+        # PLAYER IS FALLING
+        else:
+            for platform in PLATFORMS:
+                #########################################
+                if platform.isSpriteColliding(PLAYER.getPOS(), PLAYER.getDiminsoins()):
+                ##########################################
+                    if platform.isCollidingPlatform():
+                        PLAYER.JUMPING_Y = 0
+                        PLAYER.IS_JUMPING = False
+                        COLLIDING_PLATFORM += 1
+            if COLLIDING_PLATFORM == 0:
+                PLAYER.fall()
+                PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
+        PLAYER.checkBoundries(WINDOW.getWidth(), WINDOW.getHeight() - PLATFORM.getHeight())
 
         WINDOW.ClearScreen()
+        WINDOW.getSurface().blit(PLAYER.getSurface(), PLAYER.getPOS())
+        # PLATFORM
         for platform in PLATFORMS:
             WINDOW.getSurface().blit(platform.getSurface(), platform.getPOS())
+        WINDOW.getSurface().blit(PLATFORM.getSurface(), PLATFORM.getPOS())
+        # ATTACK EFFECT
+        WINDOW.getSurface().blit(PLAYER.ATTACK_EFFECT.getSurface(), PLAYER.ATTACK_EFFECT.getPOS())
         WINDOW.updateFrames()
