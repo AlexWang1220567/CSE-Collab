@@ -104,7 +104,7 @@ if __name__ == "__main__":
                 #########################################
                 if platform.isSpriteColliding(PLAYER.getPOS(), PLAYER.getDiminsoins()):
                 ##########################################
-                    if platform.isCollidingPlatform():
+                    if platform.isCollidingPlatform(PLAYER.getPOS(), PLAYER.getDiminsoins()):
                         PLAYER.JUMPING_Y = 0
                         PLAYER.IS_JUMPING = False
                         COLLIDING_PLATFORM += 1
