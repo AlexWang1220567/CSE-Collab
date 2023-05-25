@@ -23,16 +23,14 @@ class Platform(mySprite):
         if SPRITE_X >= self._X - SPRITE_W and SPRITE_X <= self._X + self.getWidth():
             if SPRITE_Y >= self._Y - SPRITE_H and SPRITE_Y <= self._Y + self.getHeight():
                 if abs(OTHER_SPRITE.HIT_BOX.bottom - self.HIT_BOX.top) < 10:
-                    self._DIR_Y *= -1
                     return True
                 if abs(OTHER_SPRITE.HIT_BOX.top - self.HIT_BOX.bottom) < 10:
-                    self._DIR_Y *= -1
                     return True
                 if abs(OTHER_SPRITE.HIT_BOX.left - self.HIT_BOX.right) < 10:
-                    self._DIR_Y *= -1
+                    OTHER_SPRITE._X = self.getPOS()[0] - OTHER_SPRITE.getWidth()
                     return True
                 if abs(OTHER_SPRITE.HIT_BOX.right - self.HIT_BOX.left) < 10:
-                    self._DIR_Y *= -1
+                    OTHER_SPRITE._X = self.getPOS()[0] + self.getWidth()
                     return True
         return False
 
