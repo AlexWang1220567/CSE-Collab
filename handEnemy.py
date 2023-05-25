@@ -168,7 +168,7 @@ class Hand_Engine:
         WINDOW = Window("Image Sprite Test")
         PLAYER = Player()
         # PLAYER.setScale(0.1)
-
+        ATTACK = True
         TIME_ELAPSED = 0
 
         # SPRITE CHANGE
@@ -182,16 +182,8 @@ class Hand_Engine:
         BOSS = Boss()
         BOSS.setPosition(
             (WINDOW.getWidth() - BOSS.getWidth(), WINDOW.getHeight() - PLATFORM.getHeight() - BOSS.getHeight()))
-        # BOSS_HEALTH_BAR = Platform(10, 200)
-        # BOSS_HEALTH_BAR.setColor((250, 0, 0))
         BOSS.BOSS_HEALTH_BAR.setPosition(
             (BOSS.getPOS()[0] + BOSS.BOSS_HEALTH_BAR.getWidth() // 2, BOSS.getPOS()[1] + 20))
-        ##### MUSIC #####
-        # pygame.mixer.pre_init(44100, -16, 2, 2048)  # setup mixer to avoid sound lag
-        # pygame.mixer.init()
-        # pygame.mixer.music.load('sprite_images/deathScene.mp3')
-        # pygame.mixer.music.play(-1)
-
 
 
 
@@ -202,7 +194,7 @@ class Hand_Engine:
 
         ### Objects
         WINDOW = Window("Hand enemy Test")
-        BUNNY = HandEnemy("sprite_images/thumb.png")
+        THUMB = HandEnemy("sprite_images/thumb.png")
         FIRE_HAND = HandEnemy("sprite_images/fireHand.png")
         LASER_HAND = HandEnemy("sprite_images/laserHand.png")
         LASER = Laser("sprite_images/fire.png")
@@ -214,7 +206,7 @@ class Hand_Engine:
         LASER.setScale(0.5)
         LASER2.setScale(0.5)
         LASER_BEAM.setScale(2)
-        BUNNY.setScale(1)
+        THUMB.setScale(1)
 
         ### Set SPD
         LASER_HAND.setSPD(5)
@@ -222,7 +214,7 @@ class Hand_Engine:
         LASER.setSPD_Y(8)
         LASER2.setSPD(10)
         LASER2.setSPD_Y(8)
-        BUNNY.setSPD(15)
+        THUMB.setSPD(15)
         LASER_BEAM.setSPD(30)
 
         ### Set DIR
@@ -232,7 +224,7 @@ class Hand_Engine:
         LASER_BEAM.setDIR_X(-1)
 
         ### Set Flips
-        BUNNY.setFlipX()
+        THUMB.setFlipX()
         LASER2.setFlipX()
         LASER_BEAM.setFlipX()
 
@@ -240,7 +232,7 @@ class Hand_Engine:
         FIRE_HAND.setFireHand(WINDOW, PLATFORM.getHeight())
         LASER.resetLaserPOS(FIRE_HAND)
         LASER2.resetLaserPOS(FIRE_HAND)
-        BUNNY.setPosition(
+        THUMB.setPosition(
             (
                 0, 0
             )
@@ -259,10 +251,6 @@ class Hand_Engine:
                 LASER_HAND.getPOS()[1] + LASER_HAND.getHeight()//2
             )
         )
-
-        # BG = ImageSprite("sprite_images/BG.png")
-        # BG.setScale(0.625, 0.58)
-        #BG.setPosition((0, 0))
 
         PLATFORMS = []
 
@@ -288,26 +276,26 @@ class Hand_Engine:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
+            if ATTACK:
+                THUMB.setPosition((PLAYER.getPOS()[0], 0))
 
             PRESSED_KEYS = pygame.key.get_pressed()
-
             TIME = clock.tick()
             time_since_fall += TIME
             time_since_laser += TIME
-            if time_since_fall > 250:
-                BUNNY.fall()
-                if BUNNY.getPOS()[1] >= WINDOW.getHeight():
+            if time_since_fall > 600:
+                if ATTACK:
+                    THUMB.setPosition((PLAYER.getPOS()[0], THUMB.getPOS()[1]))
+                    ATTACK = False
+                THUMB.fall()
+                if THUMB.getPOS()[1] >= WINDOW.getHeight():
                     time_since_fall = 0
-                    BUNNY.moveThumb(WINDOW)
+                    THUMB.moveThumb(WINDOW)
+                    ATTACK = True
             LASER.laserMovment()
             if LASER.getPOS()[0] > WINDOW.getWidth():
                 LASER.resetLaserPOS(FIRE_HAND)
-                #####
-                # pygame.mixer.pre_init(44100, -16, 2, 2048)
-                # pygame.mixer.init()
-                # pygame.mixer.music.load('sound_effects/short-fireball-woosh-6146.mp3')
-                # pygame.mixer.music.play(1)
-                #####
+
             LASER2.laserMovment()
             if LASER2.getPOS()[0] < 0:
                 LASER2.resetLaserPOS(FIRE_HAND)
@@ -315,12 +303,6 @@ class Hand_Engine:
             if time_since_laser > 30:
                 LASER_BEAM.shootLaser(LASER_HAND)
                 if LASER_BEAM.getPOS()[0] < (0 - LASER_BEAM.getWidth()):
-                    # ######
-                    # pygame.mixer.pre_init(44100, -16, 2, 2048)
-                    # pygame.mixer.init()
-                    # pygame.mixer.music.load('sound_effects/laser-zap-90575.mp3')
-                    # pygame.mixer.music.play(1)
-                    # ######
                     time_since_laser = 0
                     LASER_BEAM.setPosition(
                         (
@@ -347,42 +329,12 @@ class Hand_Engine:
                     PLAYER.fall()
                     PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
             PLAYER.checkBoundries(WINDOW.getWidth(), WINDOW.getHeight() - PLATFORM.getHeight())
-            # PLATFORM
-            # for platform in PLATFORMS:
-            #     if PLAYER.isSpriteColliding(platform.getPOS(), platform.getDiminsoins()):
-            #         if not PLAYER.IS_JUMPING:
-            #             # PLAYER.fall()
-            #             PLAYER.JUMPING_Y = 0
-            #             PLAYER.IS_JUMPING = False
-                        # PLAYER.setPosition((PLAYER.getPOS()[0], platform.getPOS()[1]-platform.getHeight()))
             if PLAYER.isSpriteColliding(PLATFORM.getPOS(), PLATFORM.getDiminsoins()):
                 PLAYER.JUMPING_Y = 0
-            #   PLAYER.setPosition((PLAYER.getPOS()[0], PLAYER.getPOS()[1]-PLAYER.getSPD()))
-
-            # else:
-            # if not PLAYER.IS_JUMPING and PLAYER.JUMPING_Y >= PLAYER.JUMP_HEIGHT:
-            #       PLAYER.fall()
-
-            # # ANIMATION
-            # TIME_ELAPSED += 1
-            # if TIME_ELAPSED >= 25:
-            #     # NOT OUT OF SPRITES YET
-            #     if PLAYER.IMAGE_IND < len(PLAYER.IMAGES) - 1:
-            #         PLAYER.IMAGE_IND += 1
-            #     else:
-            #         PLAYER.IMAGE_IND = 0
-            #     # REPLACE SPRITE
-            #     PRESSED_KEYS = pygame.key.get_pressed()
-            #     PLAYER.setSprite(PRESSED_KEYS)
-            #     TIME_ELAPSED = 0
-
 
             LASER_HAND.bounceY(LASER_HAND.getHeight(), WINDOW.getHeight())
 
             WINDOW.ClearScreen()
-
-            ### BG
-            #WINDOW.getSurface().blit(BG.getSurface(), BG.getPOS())
 
             ##### BOSS - BLIT BEFORE PLAYER #####
             WINDOW.getSurface().blit(BOSS.getSurface(), BOSS.getPOS())
@@ -392,12 +344,13 @@ class Hand_Engine:
             # PLATFORM
             for platform in PLATFORMS:
                 WINDOW.getSurface().blit(platform.getSurface(), platform.getPOS())
-            WINDOW.getSurface().blit(PLATFORM.getSurface(), PLATFORM.getPOS())
+
             # ATTACK EFFECT
             WINDOW.getSurface().blit(PLAYER.ATTACK_EFFECT.getSurface(), PLAYER.ATTACK_EFFECT.getPOS())
 
-            WINDOW.getSurface().blit(BUNNY.getSurface(), BUNNY.getPOS())
+            WINDOW.getSurface().blit(THUMB.getSurface(), THUMB.getPOS())
             WINDOW.getSurface().blit(FIRE_HAND.getSurface(), FIRE_HAND.getPOS())
+            WINDOW.getSurface().blit(PLATFORM.getSurface(), PLATFORM.getPOS())
             WINDOW.getSurface().blit(LASER.getSurface(), LASER.getPOS())
             WINDOW.getSurface().blit(LASER2.getSurface(), LASER2.getPOS())
             WINDOW.getSurface().blit(LASER_BEAM.getSurface(), LASER_BEAM.getPOS())
