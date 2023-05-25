@@ -260,8 +260,8 @@ class Hand_Engine:
             )
         )
 
-        BG = ImageSprite("sprite_images/BG.png")
-        BG.setScale(0.625, 0.58)
+        # BG = ImageSprite("sprite_images/BG.png")
+        # BG.setScale(0.625, 0.58)
         #BG.setPosition((0, 0))
 
         PLATFORMS = []
@@ -382,7 +382,7 @@ class Hand_Engine:
             WINDOW.ClearScreen()
 
             ### BG
-            WINDOW.getSurface().blit(BG.getSurface(), BG.getPOS())
+            #WINDOW.getSurface().blit(BG.getSurface(), BG.getPOS())
 
             ##### BOSS - BLIT BEFORE PLAYER #####
             WINDOW.getSurface().blit(BOSS.getSurface(), BOSS.getPOS())
