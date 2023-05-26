@@ -6,6 +6,7 @@ date-created: 05/10/2023
 
 from mySprite import mySprite
 from imageSprite import ImageSprite
+from platform import Platform
 import pygame
 
 class Player(mySprite):
@@ -35,12 +36,16 @@ class Player(mySprite):
 
         self.__JUMP_HEIGHT = 230
 
+        self.HIT_BOX = (self._X, self._Y, self.getWidth(), self.getHeight())
+        # The elements in the hitbox are (top left x, top left y, width, height)
+
         ####################
         self.HEALTH_BAR = []
         for i in range(6):
             BAR = Platform(15, 10)
-            BAR.setColor((250, 0, 0))
+            BAR.setColor((250, 100, 100))
             self.HEALTH_BAR.append(BAR)
+
         ####################
 
 
@@ -172,8 +177,9 @@ if __name__ == "__main__":
     ###################
     BAR_COUNT = 0
     for bar in PLAYER.HEALTH_BAR:
-        bar.setPosition((BAR_COUNT*30, WINDOW.getHeight()-bar.getHeight()-20))
         BAR_COUNT += 1
+        bar.setPosition((BAR_COUNT*20, WINDOW.getHeight()-bar.getHeight()-20))
+
 
 
     while True:

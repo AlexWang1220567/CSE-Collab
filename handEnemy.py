@@ -283,7 +283,7 @@ class Hand_Engine:
             TIME = clock.tick()
             time_since_fall += TIME
             time_since_laser += TIME
-            if time_since_fall > 600:
+            if time_since_fall > 900:
                 if ATTACK:
                     THUMB.setPosition((PLAYER.getPOS()[0], THUMB.getPOS()[1]))
                     ATTACK = False
@@ -325,6 +325,7 @@ class Hand_Engine:
                         PLAYER.JUMPING_Y = 0
                         PLAYER.IS_JUMPING = False
                         COLLIDING_PLATFORM += 1
+                        PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
                 if COLLIDING_PLATFORM == 0:
                     PLAYER.fall()
                     PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))

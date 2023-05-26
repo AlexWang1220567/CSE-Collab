@@ -16,11 +16,15 @@ class Platform(mySprite):
         self.HIT_BOX = pygame.Rect(self.getPOS()[0], self.getDiminsoins()[0], self.getPOS()[1], self.getDiminsoins()[1])
 
     def isCollidingPlatform(self, OTHER_SPRITE, POSITION, DIMINSION):
-        SPRITE_X = POSITION[0]
-        SPRITE_Y = POSITION[1]
+
         SPRITE_W = DIMINSION[0]
         SPRITE_H = DIMINSION[1]
+        SPRITE_X = POSITION[0]
+        SPRITE_Y = POSITION[1]
         if SPRITE_X >= self._X - SPRITE_W and SPRITE_X <= self._X + self.getWidth():
+            if SPRITE_Y >= self._Y - SPRITE_H and SPRITE_Y <= self._Y + self.getHeight():
+                return True
+        """if SPRITE_X >= self._X - SPRITE_W and SPRITE_X <= self._X + self.getWidth():
             if SPRITE_Y >= self._Y - SPRITE_H and SPRITE_Y <= self._Y + self.getHeight():
                 if abs(OTHER_SPRITE.HIT_BOX.bottom - self.HIT_BOX.top) < 10:
                     return True
@@ -31,7 +35,7 @@ class Platform(mySprite):
                     return True
                 if abs(OTHER_SPRITE.HIT_BOX.right - self.HIT_BOX.left) < 10:
                     OTHER_SPRITE._X = self.getPOS()[0] + self.getWidth()
-                    return True
+                    return True"""
         return False
 
 
@@ -113,6 +117,7 @@ if __name__ == "__main__":
                     PLAYER.JUMPING_Y = 0
                     PLAYER.IS_JUMPING = False
                     COLLIDING_PLATFORM += 1
+                    PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
             if COLLIDING_PLATFORM == 0:
                 PLAYER.fall()
                 PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
