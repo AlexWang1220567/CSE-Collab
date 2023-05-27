@@ -36,8 +36,7 @@ class Player(mySprite):
 
         self.__JUMP_HEIGHT = 230
 
-        self.HIT_BOX = (self._X, self._Y, self.getWidth(), self.getHeight())
-        # The elements in the hitbox are (top left x, top left y, width, height)
+
 
         ####################
         self.HEALTH_BAR = []
@@ -56,7 +55,7 @@ class Player(mySprite):
 
     def setSprite(self, KEYS_PRESSED):
 
-        if self.WALK_TIME_ELAPSED >= 20:
+        if self.WALK_TIME_ELAPSED > 200:
 
             # NOT OUT OF SPRITES YET
             if self.IMAGE_IND < len(self.IMAGES) - 1:
@@ -162,6 +161,23 @@ if __name__ == "__main__":
 
     WINDOW = Window("Image Sprite Test")
     PLAYER = Player()
+
+    PLATFORMS = []
+    for i in range(6):
+        PLATFORMS.append(Platform(25, 150))
+    PLATFORM_COUNTER = -1
+    for x in range(3):
+        print(x)
+        for j in range(2):
+            print(j)
+            PLATFORM_COUNTER += 1
+            PLATFORMS[PLATFORM_COUNTER].setPosition(
+                (
+                    (200 + (300 * j)),
+                    (100 + (170 * x))
+                )
+            )
+
     #PLAYER.setScale(0.1)
 
     TIME_ELAPSED = 0

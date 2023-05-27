@@ -169,7 +169,6 @@ class Hand_Engine:
         PLAYER = Player()
         # PLAYER.setScale(0.1)
         ATTACK = True
-        TIME_ELAPSED = 0
 
         # SPRITE CHANGE
         PLAYER.setFlipX()
@@ -276,14 +275,16 @@ class Hand_Engine:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
-            if ATTACK:
-                THUMB.setPosition((PLAYER.getPOS()[0], 0))
 
             PRESSED_KEYS = pygame.key.get_pressed()
             TIME = clock.tick()
             time_since_fall += TIME
             time_since_laser += TIME
-            if time_since_fall > 900:
+
+            if ATTACK:
+                THUMB.setPosition((PLAYER.getPOS()[0], 0))
+
+            if time_since_fall > 1200:
                 if ATTACK:
                     THUMB.setPosition((PLAYER.getPOS()[0], THUMB.getPOS()[1]))
                     ATTACK = False
@@ -300,7 +301,7 @@ class Hand_Engine:
             if LASER2.getPOS()[0] < 0:
                 LASER2.resetLaserPOS(FIRE_HAND)
 
-            if time_since_laser > 30:
+            if time_since_laser > 50:
                 LASER_BEAM.shootLaser(LASER_HAND)
                 if LASER_BEAM.getPOS()[0] < (0 - LASER_BEAM.getWidth()):
                     time_since_laser = 0
@@ -312,7 +313,7 @@ class Hand_Engine:
                     )
 
             ### PROCESSING
-            PLAYER.WALK_TIME_ELAPSED += 1
+            PLAYER.WALK_TIME_ELAPSED += TIME
             PLAYER.movePlayer(PRESSED_KEYS)
             COLLIDING_PLATFORM = 0
             # JUMP
