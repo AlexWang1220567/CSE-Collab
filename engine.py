@@ -8,12 +8,12 @@ from boss import Boss
 from platform import Platform
 from player import Player
 from window import Window
-from text import Text
-from imageSprite import ImageSprite
+#from text import Text
+#from imageSprite import ImageSprite
 from handEnemy import HandEnemy
 from handEnemy import Laser
-from mySprite import mySprite
-from text import Text
+#from mySprite import mySprite
+#from text import Text
 
 
 class Engine:
