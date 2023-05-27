@@ -102,7 +102,6 @@ if __name__ == "__main__":
         PRESSED_KEYS = pygame.key.get_pressed()
 
         ### PROCESSING
-        TIME = clock.tick()
         PLAYER.WALK_TIME_ELAPSED += 1
         PLAYER.movePlayer(PRESSED_KEYS)
         COLLIDING_PLATFORM = 0
