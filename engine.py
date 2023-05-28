@@ -18,7 +18,7 @@ from handEnemy import Laser
 
 class Engine:
 
-    def __int__(self):
+    def __init__(self):
         self.__WINDOW = Window("Halloween")
 
         ### PLAYER
@@ -59,11 +59,11 @@ class Engine:
 
         ### Set SPD
         self.__LASER_HAND.setSPD(5)
-        self.__LASER.setSPD(10)
-        self.__LASER.setSPD_Y(8)
-        self.__FIRE.setSPD(10)
-        self.__FIRE.setSPD_Y(8)
-        self.__THUMB.setSPD(15)
+        self.__LASER.setSPD(5)
+        self.__LASER.setSPD_Y(3)
+        self.__FIRE.setSPD(5)
+        self.__FIRE.setSPD_Y(3)
+        self.__THUMB.setSPD(7)
         self.__LASER_BEAM.setSPD(30)
 
         ### Set DIR
@@ -76,6 +76,50 @@ class Engine:
         self.__THUMB.setFlipX()
         self.__FIRE.setFlipX()
         self.__LASER_BEAM.setFlipX()
+
+    def setPositionsBossRoom(self):
+
+        ### PLATFORMS
+        PLATFORM_COUNTER = -1
+        for x in range(3):
+            print(x)
+            for j in range(2):
+                print(j)
+                PLATFORM_COUNTER += 1
+                self.__PLATFORMS[PLATFORM_COUNTER].setPosition(
+                    (
+                        (200 + (300 * j)),
+                        (100 + (170 * x))
+                    )
+                )
+
+        ### HANDS
+        self.__FIRE_HAND.setFireHand(self.__WINDOW, self.__GROUND.getHeight())
+        self.__LASER.resetLaserPOS(self.__FIRE_HAND)
+        self.__FIRE.resetLaserPOS(self.__FIRE_HAND)
+        self.__THUMB.setPosition(
+            (
+                0, 0
+            )
+        )
+        self.__LASER_HAND.setPosition(
+            (
+                self.__WINDOW.getWidth() - self.__LASER_HAND.getWidth(),
+                self.__WINDOW.getHeight() // 2
+            )
+        )
+        self.__LASER_BEAM.setPosition(
+            (
+                self.__LASER_HAND.getPOS()[0],
+                self.__LASER_HAND.getPOS()[1] + self.__LASER_HAND.getHeight() // 2
+            )
+        )
+        self.__PLAYER.setPosition((0, self.__WINDOW.getHeight()))
+        self.__BOSS.setPosition(
+            (self.__WINDOW.getWidth() - self.__BOSS.getWidth(),
+             self.__WINDOW.getHeight() - self.__GROUND.getHeight() - self.__BOSS.getHeight()))
+        self.__BOSS.BOSS_HEALTH_BAR.setPosition(
+            (self.__BOSS.getPOS()[0] + self.__BOSS.BOSS_HEALTH_BAR.getWidth() // 2, self.__BOSS.getPOS()[1] + 20))
 
 
     def bossRoom(self):
@@ -180,36 +224,6 @@ class Engine:
             self.__WINDOW.getSurface().blit(self.__LASER_HAND.getSurface(), self.__LASER_HAND.getPOS())
 
             self.__WINDOW.updateFrames()
-
-    def setPositionsBossRoom(self):
-
-        ### HANDS
-        self.__FIRE_HAND.setFireHand(self.__WINDOW, self.__GROUND.getHeight())
-        self.__LASER.resetLaserPOS(self.__FIRE_HAND)
-        self.__FIRE.resetLaserPOS(self.__FIRE_HAND)
-        self.__THUMB.setPosition(
-            (
-                0, 0
-            )
-        )
-        self.__LASER_HAND.setPosition(
-            (
-                self.__WINDOW.getWidth() - self.__LASER_HAND.getWidth(),
-                self.__WINDOW.getHeight() // 2
-            )
-        )
-        self.__LASER_BEAM.setPosition(
-            (
-                self.__LASER_HAND.getPOS()[0],
-                self.__LASER_HAND.getPOS()[1] + self.__LASER_HAND.getHeight() // 2
-            )
-        )
-        self.__PLAYER.setPosition((0, self.__WINDOW.getHeight()))
-        self.__BOSS.setPosition(
-            (self.__WINDOW.getWidth() - self.__BOSS.getWidth(),
-             self.__WINDOW.getHeight() - self.__GROUND.getHeight() - self.__BOSS.getHeight()))
-        self.__BOSS.BOSS_HEALTH_BAR.setPosition(
-            (self.__BOSS.getPOS()[0] + self.__BOSS.BOSS_HEALTH_BAR.getWidth() // 2, self.__BOSS.getPOS()[1] + 20))
 
 
 if __name__ == "__main__":
