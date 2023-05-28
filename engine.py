@@ -31,14 +31,14 @@ class Engine:
         self.__THUMB = HandEnemy("sprite_images/thumb.png")
         self.__FIRE_HAND = HandEnemy("sprite_images/fireHand.png")
         self.__LASER_HAND = HandEnemy("sprite_images/laserHand.png")
-        self.__LASER = Laser("sprite_images/fire.png")
-        self.__FIRE = Laser("sprite_images/fire.png")  # LASER2
+        self.__FIRE_2 = Laser("sprite_images/fire.png")
+        self.__FIRE_1 = Laser("sprite_images/fire.png")  # LASER2
         self.__LASER_BEAM = Laser("sprite_images/laserBeam.png")
         self.initializeHands()
         self.__ATTACK_THUMB = True  # ATTACK
 
         ### GROUND
-        self.__GROUND = Platform(40, self.__WINDOW.getWidth())
+        self.__GROUND = Platform(50, self.__WINDOW.getWidth())
         self.__GROUND.setPosition((0, self.__WINDOW.getHeight() - self.__GROUND.getHeight()))
 
         ### PLATFORMS
@@ -51,33 +51,39 @@ class Engine:
 
     def initializeHands(self):
         ### Set scales
-        self.__LASER_HAND.setScale(2.7)
-        self.__LASER.setScale(0.5)
-        self.__FIRE.setScale(0.5)
-        self.__LASER_BEAM.setScale(2)
-        self.__THUMB.setScale(1)
+        self.__LASER_HAND.setScale(2.5)
+        self.__FIRE_2.setScale(0.5)
+        self.__FIRE_1.setScale(0.5)
+        self.__LASER_BEAM.setScale(1.5)
+        self.__THUMB.setScale(1.2)
 
         ### Set SPD
         self.__LASER_HAND.setSPD(5)
-        self.__LASER.setSPD(5)
-        self.__LASER.setSPD_Y(3)
-        self.__FIRE.setSPD(5)
-        self.__FIRE.setSPD_Y(3)
+        self.__FIRE_2.setSPD(5)
+        self.__FIRE_2.setSPD_Y(3)
+        self.__FIRE_1.setSPD(5)
+        self.__FIRE_1.setSPD_Y(3)
         self.__THUMB.setSPD(7)
-        self.__LASER_BEAM.setSPD(30)
+        self.__LASER_BEAM.setSPD(20)
 
         ### Set DIR
-        self.__LASER.setDIR_Y((-1))
-        self.__FIRE.setDIR_Y((-1))
-        self.__FIRE.setDIR_X((-1))
+        self.__FIRE_2.setDIR_Y((-1))
+        self.__FIRE_1.setDIR_Y((-1))
+        self.__FIRE_1.setDIR_X((-1))
         self.__LASER_BEAM.setDIR_X(-1)
 
         ### Set Flips
         self.__THUMB.setFlipX()
-        self.__FIRE.setFlipX()
+        self.__FIRE_1.setFlipX()
         self.__LASER_BEAM.setFlipX()
 
     def setPositionsBossRoom(self):
+
+        ### PLAYER HEALTH
+        BAR_COUNT = 0
+        for bar in self.__PLAYER.HEALTH_BAR:
+            BAR_COUNT += 1
+            bar.setPosition((BAR_COUNT * 20, self.__WINDOW.getHeight() - bar.getHeight() - 20))
 
         ### PLATFORMS
         PLATFORM_COUNTER = -1
@@ -95,8 +101,8 @@ class Engine:
 
         ### HANDS
         self.__FIRE_HAND.setFireHand(self.__WINDOW, self.__GROUND.getHeight())
-        self.__LASER.resetLaserPOS(self.__FIRE_HAND)
-        self.__FIRE.resetLaserPOS(self.__FIRE_HAND)
+        self.__FIRE_2.resetLaserPOS(self.__FIRE_HAND)
+        self.__FIRE_1.resetLaserPOS(self.__FIRE_HAND)
         self.__THUMB.setPosition(
             (
                 0, 0
@@ -159,13 +165,13 @@ class Engine:
                     self.__THUMB.moveThumb(self.__WINDOW)
                     self.__ATTACK_THUMB = True
 
-            self.__LASER.laserMovment()
-            if self.__LASER.getPOS()[0] > self.__WINDOW.getWidth():
-                self.__LASER.resetLaserPOS(self.__FIRE_HAND)
+            self.__FIRE_2.laserMovment()
+            if self.__FIRE_2.getPOS()[0] > self.__WINDOW.getWidth():
+                self.__FIRE_2.resetLaserPOS(self.__FIRE_HAND)
 
-            self.__FIRE.laserMovment()
-            if self.__FIRE.getPOS()[0] < 0:
-                self.__FIRE.resetLaserPOS(self.__FIRE_HAND)
+            self.__FIRE_1.laserMovment()
+            if self.__FIRE_1.getPOS()[0] < 0:
+                self.__FIRE_1.resetLaserPOS(self.__FIRE_HAND)
 
             if time_since_laser > 50:
                 self.__LASER_BEAM.shootLaser(self.__LASER_HAND)
@@ -201,25 +207,32 @@ class Engine:
             if self.__PLAYER.isSpriteColliding(self.__GROUND.getPOS(), self.__GROUND.getDiminsoins()):
                 self.__PLAYER.JUMPING_Y = 0
 
-            self.__WINDOW.ClearScreen()
 
+            self.__WINDOW.ClearScreen()
             ##### BOSS - BLIT BEFORE PLAYER #####
             self.__WINDOW.getSurface().blit(self.__BOSS.getSurface(), self.__BOSS.getPOS())
+            # BOSS HEALTH
             self.__WINDOW.getSurface().blit(self.__BOSS.BOSS_HEALTH_BAR.getSurface(), self.__BOSS.BOSS_HEALTH_BAR.getPOS())
             # PLAYER
             self.__WINDOW.getSurface().blit(self.__PLAYER.getSurface(), self.__PLAYER.getPOS())
             # PLATFORM
             for platform in self.__PLATFORMS:
                 self.__WINDOW.getSurface().blit(platform.getSurface(), platform.getPOS())
-
             # ATTACK EFFECT
             self.__WINDOW.getSurface().blit(self.__PLAYER.ATTACK_EFFECT.getSurface(), self.__PLAYER.ATTACK_EFFECT.getPOS())
-
+            # THUMB
             self.__WINDOW.getSurface().blit(self.__THUMB.getSurface(), self.__THUMB.getPOS())
+            # FIRE HAND
             self.__WINDOW.getSurface().blit(self.__FIRE_HAND.getSurface(), self.__FIRE_HAND.getPOS())
+            # GROUND
             self.__WINDOW.getSurface().blit(self.__GROUND.getSurface(), self.__GROUND.getPOS())
-            self.__WINDOW.getSurface().blit(self.__LASER.getSurface(), self.__LASER.getPOS())
-            self.__WINDOW.getSurface().blit(self.__FIRE.getSurface(), self.__FIRE.getPOS())
+            # PLAYER HEALTH
+            ###################
+            for health_bar in self.__PLAYER.HEALTH_BAR:
+                self.__WINDOW.getSurface().blit(health_bar.getSurface(), health_bar.getPOS())
+            #
+            self.__WINDOW.getSurface().blit(self.__FIRE_2.getSurface(), self.__FIRE_2.getPOS())
+            self.__WINDOW.getSurface().blit(self.__FIRE_1.getSurface(), self.__FIRE_1.getPOS())
             self.__WINDOW.getSurface().blit(self.__LASER_BEAM.getSurface(), self.__LASER_BEAM.getPOS())
             self.__WINDOW.getSurface().blit(self.__LASER_HAND.getSurface(), self.__LASER_HAND.getPOS())
 
