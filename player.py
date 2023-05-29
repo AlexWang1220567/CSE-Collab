@@ -37,10 +37,11 @@ class Player(mySprite):
         self.__JUMP_HEIGHT = 230
 
 
-
+        ####################
+        self.IMM_FRAME = 0
         ####################
         self.HEALTH_BAR = []
-        for i in range(6):
+        for i in range(15):
             BAR = Platform(15, 10)
             BAR.setColor((250, 100, 100))
             self.HEALTH_BAR.append(BAR)
@@ -52,6 +53,10 @@ class Player(mySprite):
         self.setSPD(10)
 
         self.WALK_TIME_ELAPSED = 0
+
+
+
+
 
     def setSprite(self, KEYS_PRESSED):
 

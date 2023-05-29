@@ -108,24 +108,32 @@ class Engine:
                 0, 0
             )
         )
+        # LASER HAND
         self.__LASER_HAND.setPosition(
             (
                 self.__WINDOW.getWidth() - self.__LASER_HAND.getWidth(),
                 self.__WINDOW.getHeight() // 2
             )
         )
+        # LASER HORIZONTAL
         self.__LASER_BEAM.setPosition(
             (
                 self.__LASER_HAND.getPOS()[0],
                 self.__LASER_HAND.getPOS()[1] + self.__LASER_HAND.getHeight() // 2
             )
         )
+        # PLAYER
         self.__PLAYER.setPosition((0, self.__WINDOW.getHeight()))
+        # BOSS
         self.__BOSS.setPosition(
             (self.__WINDOW.getWidth() - self.__BOSS.getWidth(),
              self.__WINDOW.getHeight() - self.__GROUND.getHeight() - self.__BOSS.getHeight()))
-        self.__BOSS.BOSS_HEALTH_BAR.setPosition(
-            (self.__BOSS.getPOS()[0] + self.__BOSS.BOSS_HEALTH_BAR.getWidth() // 2, self.__BOSS.getPOS()[1] + 20))
+        ### BOSS HEALTH
+        BAR_COUNT = 0
+        for bar in self.__BOSS.HEALTH_BAR:
+            bar.setPosition((self.__BOSS.getPOS()[0] + BAR_COUNT * 20, self.__BOSS.getPOS()[1]))
+            BAR_COUNT += 1
+
 
 
     def bossRoom(self):
@@ -135,6 +143,7 @@ class Engine:
         time_since_fall = 0
         time_since_laser = 0
         clock = pygame.time.Clock()
+        boss_hit = False
 
         ### POSITIONS
         self.setPositionsBossRoom()
@@ -208,36 +217,66 @@ class Engine:
             if self.__PLAYER.isSpriteColliding(self.__GROUND.getPOS(), self.__GROUND.getDiminsoins()):
                 self.__PLAYER.JUMPING_Y = 0
 
+            ######################### ATTACK
 
-            self.__WINDOW.ClearScreen()
-            ##### BOSS - BLIT BEFORE PLAYER #####
-            self.__WINDOW.getSurface().blit(self.__BOSS.getSurface(), self.__BOSS.getPOS())
-            # BOSS HEALTH
-            self.__WINDOW.getSurface().blit(self.__BOSS.BOSS_HEALTH_BAR.getSurface(), self.__BOSS.BOSS_HEALTH_BAR.getPOS())
-            # PLAYER
-            self.__WINDOW.getSurface().blit(self.__PLAYER.getSurface(), self.__PLAYER.getPOS())
-            # PLATFORM
-            for platform in self.__PLATFORMS:
-                self.__WINDOW.getSurface().blit(platform.getSurface(), platform.getPOS())
-            # ATTACK EFFECT
-            self.__WINDOW.getSurface().blit(self.__PLAYER.ATTACK_EFFECT.getSurface(), self.__PLAYER.ATTACK_EFFECT.getPOS())
-            # THUMB
-            self.__WINDOW.getSurface().blit(self.__THUMB.getSurface(), self.__THUMB.getPOS())
-            # FIRE HAND
-            self.__WINDOW.getSurface().blit(self.__FIRE_HAND.getSurface(), self.__FIRE_HAND.getPOS())
-            # GROUND
-            self.__WINDOW.getSurface().blit(self.__GROUND.getSurface(), self.__GROUND.getPOS())
-            # PLAYER HEALTH
-            ###################
-            for health_bar in self.__PLAYER.HEALTH_BAR:
-                self.__WINDOW.getSurface().blit(health_bar.getSurface(), health_bar.getPOS())
-            #
-            self.__WINDOW.getSurface().blit(self.__FIRE_2.getSurface(), self.__FIRE_2.getPOS())
-            self.__WINDOW.getSurface().blit(self.__FIRE_1.getSurface(), self.__FIRE_1.getPOS())
-            self.__WINDOW.getSurface().blit(self.__LASER_BEAM.getSurface(), self.__LASER_BEAM.getPOS())
-            self.__WINDOW.getSurface().blit(self.__LASER_HAND.getSurface(), self.__LASER_HAND.getPOS())
+            if self.__BOSS.IMM_FRAME >= 500:
+                self.__BOSS.IMM_FRAME = 0
+                boss_hit = False
 
-            self.__WINDOW.updateFrames()
+            if self.__PLAYER.ATTACK_EFFECT.isSpriteColliding(self.__BOSS.getPOS(), self.__BOSS.getDiminsoins()) and not boss_hit:
+                boss_hit = True
+                if len(self.__BOSS.HEALTH_BAR) > 0:
+                    self.__BOSS.deductHealth()
+
+            if boss_hit:
+                self.__BOSS.IMM_FRAME += TIME
+
+            ################### END
+            if len(self.__BOSS.HEALTH_BAR) <= 0:
+                pass
+            if len(self.__PLAYER.HEALTH_BAR) <= 0:
+                pass
+
+
+
+            ###### BLIT
+            self.blitBossLevel()
+
+
+    def blitBossLevel(self):
+        self.__WINDOW.ClearScreen()
+        ##### BOSS - BLIT BEFORE PLAYER #####
+        self.__WINDOW.getSurface().blit(self.__BOSS.getSurface(), self.__BOSS.getPOS())
+        # BOSS HEALTH
+        for bar in self.__BOSS.HEALTH_BAR:
+            self.__WINDOW.getSurface().blit(bar.getSurface(), bar.getPOS())
+        # PLAYER
+        self.__WINDOW.getSurface().blit(self.__PLAYER.getSurface(), self.__PLAYER.getPOS())
+        # PLATFORM
+        for platform in self.__PLATFORMS:
+            self.__WINDOW.getSurface().blit(platform.getSurface(), platform.getPOS())
+        # ATTACK EFFECT
+        self.__WINDOW.getSurface().blit(self.__PLAYER.ATTACK_EFFECT.getSurface(), self.__PLAYER.ATTACK_EFFECT.getPOS())
+        # THUMB
+        self.__WINDOW.getSurface().blit(self.__THUMB.getSurface(), self.__THUMB.getPOS())
+        # FIRE HAND
+        self.__WINDOW.getSurface().blit(self.__FIRE_HAND.getSurface(), self.__FIRE_HAND.getPOS())
+        # GROUND
+        self.__WINDOW.getSurface().blit(self.__GROUND.getSurface(), self.__GROUND.getPOS())
+        # PLAYER HEALTH
+        ###################
+        for health_bar in self.__PLAYER.HEALTH_BAR:
+            self.__WINDOW.getSurface().blit(health_bar.getSurface(), health_bar.getPOS())
+        # FIRE RIGHT?
+        self.__WINDOW.getSurface().blit(self.__FIRE_2.getSurface(), self.__FIRE_2.getPOS())
+        # FIRE LEFT?
+        self.__WINDOW.getSurface().blit(self.__FIRE_1.getSurface(), self.__FIRE_1.getPOS())
+        # LASER HORIZONTAL
+        self.__WINDOW.getSurface().blit(self.__LASER_BEAM.getSurface(), self.__LASER_BEAM.getPOS())
+        # LASER HAND
+        self.__WINDOW.getSurface().blit(self.__LASER_HAND.getSurface(), self.__LASER_HAND.getPOS())
+
+        self.__WINDOW.updateFrames()
 
 
 if __name__ == "__main__":

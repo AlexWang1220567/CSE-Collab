@@ -28,13 +28,21 @@ class Boss(mySprite):
         # self.JUMPING_Y = 0
         # self.IS_JUMPING = False
         # self.JUMP_HEIGHT = 140
-        self.__HEALTH = 100
-        self.BOSS_HEALTH_BAR = Platform(10, 200)
-        self.BOSS_HEALTH_BAR.setColor((250, 0, 0))
         # self.setSPD(5)
 
-    def deductHealth(self, DAMAGE):
-        self.__HEALTH -= DAMAGE
+        #################### IMMUNITY FRAME
+        self.IMM_FRAME = 0
+        ###################
+        self.HEALTH_BAR = []
+        for i in range(25):
+            BAR = Platform(15, 10)
+            BAR.setColor((250, 100, 100))
+            self.HEALTH_BAR.append(BAR)
+
+        ####################
+
+    def deductHealth(self):
+        self.HEALTH_BAR.pop(0)
 
 
 
