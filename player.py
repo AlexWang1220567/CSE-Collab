@@ -135,16 +135,22 @@ class Player(mySprite):
         """
         self._SURFACE = pygame.transform.flip(self._SURFACE, True, False)
 
-    def isFallOnPlatform(self, POS, DIM):
+    def isFallOnPlatform(self, POSITION, DIMINSION):
         """
         detect if the player is FALLING on platform
         :param POS: tuple
         :param DIM: tuple
         :return: bool
         """
-        # is falling
-        if not self.IS_JUMPING:
-            pass
+        SPRITE_X = POSITION[0]
+        SPRITE_Y = POSITION[1]
+        SPRITE_W = DIMINSION[0]
+        SPRITE_H = DIMINSION[1]
+
+        if SPRITE_X >= self._X - SPRITE_W and SPRITE_X <= self._X + self.getWidth():
+            if SPRITE_Y + SPRITE_H >= self._Y + self.getHeight()*0.9 and SPRITE_Y <= self._Y + self.getHeight():
+                return True
+        return False
 
 
     def getSPD(self):

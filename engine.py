@@ -44,7 +44,7 @@ class Engine:
         ### PLATFORMS
         self.__PLATFORMS = []
         for i in range(6):
-            self.__PLATFORMS.append(Platform(25, 150))
+            self.__PLATFORMS.append(Platform(8, 150))
 
         ### LEVELS
         self.__AT_BOSS_LEVEL = True
@@ -196,9 +196,10 @@ class Engine:
             else:
                 for platform in self.__PLATFORMS:
                     if self.__PLAYER.isSpriteColliding(platform.getPOS(), platform.getDiminsoins()):
-                        self.__PLAYER.JUMPING_Y = 0
-                        self.__PLAYER.IS_JUMPING = False
-                        COLLIDING_PLATFORM += 1
+                        if self.__PLAYER.isFallOnPlatform(platform.getPOS(), platform.getDiminsoins()):
+                            self.__PLAYER.JUMPING_Y = 0
+                            self.__PLAYER.IS_JUMPING = False
+                            COLLIDING_PLATFORM += 1
                         self.__PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
                 if COLLIDING_PLATFORM == 0:
                     self.__PLAYER.fall()
