@@ -223,7 +223,7 @@ class Engine:
                 self.__PLAYER.JUMPING_Y = 0
 
             self.blitBossLevel()
-            if self.__PLAYER.getPOS()[0] > (self.__WINDOW.getWidth() * (4/5)):
+            if self.__PLAYER.getPOS()[0] > (self.__WINDOW.getWidth() * (9/10)):
                 self.__AT_START_LEVEL = False
         self.bossRoom()
 
