@@ -88,9 +88,7 @@ class Engine:
         ### PLATFORMS
         PLATFORM_COUNTER = -1
         for x in range(3):
-            print(x)
             for j in range(2):
-                print(j)
                 PLATFORM_COUNTER += 1
                 self.__PLATFORMS[PLATFORM_COUNTER].setPosition(
                     (
