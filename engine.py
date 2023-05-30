@@ -188,8 +188,11 @@ class Engine:
         for bar in self.__BOSS.HEALTH_BAR:
             bar.setPosition((5000, 5000))
             BAR_COUNT += 1
+
+        clock = pygame.time.Clock()
+
         while self.__AT_START_LEVEL:
-            clock = pygame.time.Clock()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
