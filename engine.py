@@ -9,7 +9,7 @@ from platform import Platform
 from player import Player
 from window import Window
 #from text import Text
-#from imageSprite import ImageSprite
+from imageSprite import ImageSprite
 from handEnemy import HandEnemy
 from handEnemy import Laser
 #from mySprite import mySprite
@@ -48,6 +48,9 @@ class Engine:
 
         ### LEVELS
         self.__AT_BOSS_LEVEL = True
+        ### BG
+        self.__BG = ImageSprite("sprite_images/BG.png")
+        self.__BG.setScale(2)
 
     def initializeHands(self):
         ### Set scales
@@ -244,6 +247,8 @@ class Engine:
 
     def blitBossLevel(self):
         self.__WINDOW.ClearScreen()
+        ###### BG
+        self.__WINDOW.getSurface().blit(self.__BG.getSurface(), self.__BG.getPOS())
         ##### BOSS - BLIT BEFORE PLAYER #####
         self.__WINDOW.getSurface().blit(self.__BOSS.getSurface(), self.__BOSS.getPOS())
         # BOSS HEALTH
