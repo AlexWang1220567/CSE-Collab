@@ -14,7 +14,7 @@ class Window:
     :return: None
     """
 
-    def __init__(self, TITLE, WIDTH=1200, HEIGHT=650, FPS=60):
+    def __init__(self, TITLE, WIDTH=1200, HEIGHT=650, FPS=120):
         self.__TITLE = TITLE # text that appears in the title bar
         self.__FPS = FPS # the frames/second the window with refresh
         self.__WIDTH = WIDTH # Width of the window
