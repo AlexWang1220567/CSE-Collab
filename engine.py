@@ -48,6 +48,7 @@ class Engine:
 
         ### LEVELS
         self.__AT_BOSS_LEVEL = True
+        self.__AT_START_LEVEL = True
         ### BG
         self.__BG = ImageSprite("sprite_images/BG.png")
         self.__BG.setScale(2)
@@ -135,7 +136,95 @@ class Engine:
             bar.setPosition((self.__BOSS.getPOS()[0] + BAR_COUNT * 20, self.__BOSS.getPOS()[1]))
             BAR_COUNT += 1
 
+    def startScreen(self):
 
+
+        BAR_COUNT = 0
+        for bar in self.__PLAYER.HEALTH_BAR:
+            BAR_COUNT += 1
+            bar.setPosition((5000, 5000))
+
+        ### PLATFORMS
+        PLATFORM_COUNTER = -1
+        for x in range(3):
+            for j in range(2):
+                PLATFORM_COUNTER += 1
+                self.__PLATFORMS[PLATFORM_COUNTER].setPosition(
+                    (
+                        (5000),
+                        (5000)
+                    )
+                )
+
+        ### HANDS
+        self.__FIRE_HAND.setPosition((5000, 5000))
+        self.__FIRE_2.resetLaserPOS(self.__FIRE_HAND)
+        self.__FIRE_1.resetLaserPOS(self.__FIRE_HAND)
+        self.__THUMB.setPosition(
+            (
+                5000, 5000
+            )
+        )
+        # LASER HAND
+        self.__LASER_HAND.setPosition(
+            (
+                5000,
+                5000
+            )
+        )
+        # LASER HORIZONTAL
+        self.__LASER_BEAM.setPosition(
+            (
+                5000,
+                5000
+            )
+        )
+        # PLAYER
+        self.__PLAYER.setPosition((0, self.__WINDOW.getHeight()))
+        # BOSS
+        self.__BOSS.setPosition((5000, 5000))
+        ### BOSS HEALTH
+        BAR_COUNT = 0
+        for bar in self.__BOSS.HEALTH_BAR:
+            bar.setPosition((5000, 5000))
+            BAR_COUNT += 1
+        while self.__AT_START_LEVEL:
+            clock = pygame.time.Clock()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            PRESSED_KEYS = pygame.key.get_pressed()
+            TIME = clock.tick()
+            ### PLAYER
+            self.__PLAYER.WALK_TIME_ELAPSED += TIME
+            self.__PLAYER.movePlayer(PRESSED_KEYS)
+            COLLIDING_PLATFORM = 0
+            # JUMP
+            if self.__PLAYER.IS_JUMPING:
+                self.__PLAYER.jumpPlayer()
+                self.__PLAYER.ATTACK_EFFECT.setPosition(
+                    (self.__PLAYER.getPOS()[0] + self.__PLAYER.getWidth(), self.__PLAYER.getPOS()[1]))
+            else:
+                for platform in self.__PLATFORMS:
+                    if self.__PLAYER.isSpriteColliding(platform.getPOS(), platform.getDiminsoins()):
+                        if self.__PLAYER.isFallOnPlatform(platform.getPOS(), platform.getDiminsoins()):
+                            self.__PLAYER.JUMPING_Y = 0
+                            self.__PLAYER.IS_JUMPING = False
+                            COLLIDING_PLATFORM += 1
+                        self.__PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
+                if COLLIDING_PLATFORM == 0:
+                    self.__PLAYER.fall()
+                    self.__PLAYER.ATTACK_EFFECT.setPosition((5000, 5000))
+            self.__PLAYER.checkBoundries(self.__WINDOW.getWidth(),
+                                         self.__WINDOW.getHeight() - self.__GROUND.getHeight())
+            if self.__PLAYER.isSpriteColliding(self.__GROUND.getPOS(), self.__GROUND.getDiminsoins()):
+                self.__PLAYER.JUMPING_Y = 0
+
+            self.blitBossLevel()
+            if self.__PLAYER.getPOS()[0] > (self.__WINDOW.getWidth() * (4/5)):
+                self.__AT_START_LEVEL = False
+        self.bossRoom()
 
     def bossRoom(self):
 
@@ -286,7 +375,7 @@ class Engine:
 if __name__ == "__main__":
     pygame.init()
     GAME = Engine()
-    GAME.bossRoom()
+    GAME.startScreen()
 
 
 
