@@ -55,7 +55,8 @@ class Player(mySprite):
         self.WALK_TIME_ELAPSED = 0
 
 
-
+    def deductHealth(self):
+        self.HEALTH_BAR.pop(len(self.HEALTH_BAR)-1)
 
 
     def setSprite(self, KEYS_PRESSED):

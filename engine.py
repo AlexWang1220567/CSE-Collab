@@ -223,7 +223,8 @@ class Engine:
                 self.__BOSS.IMM_FRAME = 0
                 boss_hit = False
 
-            if self.__PLAYER.ATTACK_EFFECT.isSpriteColliding(self.__BOSS.getPOS(), self.__BOSS.getDiminsoins()) and not boss_hit:
+            if self.__PLAYER.ATTACK_EFFECT.isSpriteColliding(self.__BOSS.getPOS(), self.__BOSS.getDiminsoins()) and \
+                    not boss_hit:
                 boss_hit = True
                 if len(self.__BOSS.HEALTH_BAR) > 0:
                     self.__BOSS.deductHealth()
