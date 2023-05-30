@@ -137,8 +137,6 @@ class Engine:
             BAR_COUNT += 1
 
     def startScreen(self):
-
-
         BAR_COUNT = 0
         for bar in self.__PLAYER.HEALTH_BAR:
             BAR_COUNT += 1
