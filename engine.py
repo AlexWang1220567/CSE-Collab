@@ -44,7 +44,7 @@ class Engine:
         ### PLATFORMS
         self.__PLATFORMS = []
         for i in range(6):
-            self.__PLATFORMS.append(Platform(8, 150))
+            self.__PLATFORMS.append(Platform(15, 150))
 
         ### LEVELS
         self.__AT_BOSS_LEVEL = True
