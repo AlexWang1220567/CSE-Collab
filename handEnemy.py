@@ -23,6 +23,11 @@ class HandEnemy(mySprite):
         self._SURFACE = pygame.image.load(self.__FILE_LOC).convert_alpha()
         self.__X_FLIP = True
 
+    def setSprite(self, SPRITE):
+        NEW_SPRITE = SPRITE
+        self._SURFACE = pygame.image.load(NEW_SPRITE).convert_alpha()
+        self.setFlipX()
+
     def moveWASD(self, KEYS_PRESSED):
 
         mySprite.moveWASD(self, KEYS_PRESSED)
