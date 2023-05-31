@@ -50,7 +50,7 @@ class Player(mySprite):
 
 
 
-        self.setSPD(10)
+        self.setSPD(5)
 
         self.WALK_TIME_ELAPSED = 0
 

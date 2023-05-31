@@ -67,8 +67,8 @@ class Engine:
         self.__FIRE_2.setSPD_Y(3)
         self.__FIRE_1.setSPD(5)
         self.__FIRE_1.setSPD_Y(3)
-        self.__THUMB.setSPD(7)
-        self.__LASER_BEAM.setSPD(20)
+        self.__THUMB.setSPD(3)
+        self.__LASER_BEAM.setSPD(10)
 
         ### Set DIR
         self.__FIRE_2.setDIR_Y((-1))

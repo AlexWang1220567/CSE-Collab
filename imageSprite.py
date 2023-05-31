@@ -14,7 +14,7 @@ class ImageSprite(mySprite):
 
         self.__FILE_LOC = IMAGE
         # load with transparency (convert_alpha)
-        self._SURFACE = pygame.image.load(self.__FILE_LOC)  ## PROBLEM IS LOAD WITH TRANSPARENCY
+        self._SURFACE = pygame.image.load(self.__FILE_LOC).convert_alpha() ## PROBLEM IS LOAD WITH TRANSPARENCY
         # self._SURFACE = pygame.image.load("sprite_images/PumpkinSage.png")
         self.__X_FLIP = False
 
