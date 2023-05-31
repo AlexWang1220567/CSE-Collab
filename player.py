@@ -14,10 +14,6 @@ class Player(mySprite):
     def __init__(self):
         mySprite.__init__(self)
         self.IMAGES = []
-        # self.IMAGES.append(pygame.image.load("sprite_images/player_walk_1.png").convert_alpha())
-        # self.IMAGES.append(pygame.image.load("sprite_images/player_walk_3.png").convert_alpha())
-        # self.IMAGES.append(pygame.image.load("sprite_images/player_walk_2.png").convert_alpha())
-        # self.IMAGES.append(pygame.image.load("sprite_images/player_walk_3.png").convert_alpha())
         self.IMAGES.append(pygame.image.load("sprite_images/walk_3.png").convert_alpha())
         self.IMAGES.append(pygame.image.load("sprite_images/walk_1.png").convert_alpha())
         self.IMAGES.append(pygame.image.load("sprite_images/walk_3.png").convert_alpha())
