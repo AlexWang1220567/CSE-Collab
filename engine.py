@@ -30,7 +30,7 @@ class Engine:
         ### BOSS HANDS
         self.__THUMB = HandEnemy("sprite_images/thumb.png")
         self.__FIRE_HAND = HandEnemy("sprite_images/fireHand (1).png")
-        self.__LASER_HAND = HandEnemy("sprite_images/laserHand.png")
+        self.__LASER_HAND = HandEnemy("sprite_images/laserHand (1).png")
         self.__FIRE_2 = Laser("sprite_images/fire.png")
         self.__FIRE_1 = Laser("sprite_images/fire.png")  # LASER2
         self.__LASER_BEAM = Laser("sprite_images/laserBeam.png")
@@ -51,12 +51,17 @@ class Engine:
         self.__AT_START_LEVEL = True
         ### BG
         self.__BG = ImageSprite("sprite_images/BG.png")
+        self.__BG_PEACEFUL_NIGHT = ImageSprite("sprite_images/BG_PEACEFUL_NIGHT.png")
         self.__BG.setScale(2)
+        self.__BG_PEACEFUL_NIGHT.setScale(2)
 
         ### MUSIC
         pygame.mixer.init()
         self.__MUSIC_BOSS = pygame.mixer.Sound("sound_effects/PumpkinMoonLord.mp3")
         self.__MUSIC_HOME = pygame.mixer.Sound("sound_effects/The Caretaker - Everywhere at the end of time - 09 B3 - Quiet internal rebellions.mp3")
+        self.__SOUND_THUMB_FALL = pygame.mixer.Sound("sound_effects/short-fireball-woosh-6146.mp3")
+        self.__SOUND_THUMB_FALL.set_volume(0.5)
+        #self.__SOUND_FIRE = pygame.mixer.Sound("sound_effects/short-fireball-woosh-6146.mp3")
         # firstSound.play()
         # secondSound.play()
 
@@ -233,7 +238,7 @@ class Engine:
             if self.__PLAYER.isSpriteColliding(self.__GROUND.getPOS(), self.__GROUND.getDiminsoins()):
                 self.__PLAYER.JUMPING_Y = 0
 
-            self.blitBossLevel()
+            self.blitPeacefulNight()
             if self.__PLAYER.getPOS()[0] > (self.__WINDOW.getWidth() * (9/10)):
                 self.__AT_START_LEVEL = False
         self.bossRoom()
@@ -345,14 +350,29 @@ class Engine:
             ################### END
             if len(self.__BOSS.HEALTH_BAR) <= 0:
                 pass
+                # self.__AT_BOSS_LEVEL = False
             if len(self.__PLAYER.HEALTH_BAR) <= 0:
                 pass
-
-
 
             ###### BLIT
             self.blitBossLevel()
 
+    def blitPeacefulNight(self):
+        self.__WINDOW.ClearScreen()
+        ###### BG
+        self.__WINDOW.getSurface().blit(self.__BG_PEACEFUL_NIGHT.getSurface(), self.__BG_PEACEFUL_NIGHT.getPOS())
+        # ATTACK EFFECT
+        self.__WINDOW.getSurface().blit(self.__PLAYER.ATTACK_EFFECT.getSurface(), self.__PLAYER.ATTACK_EFFECT.getPOS())
+        # GROUND
+        self.__WINDOW.getSurface().blit(self.__GROUND.getSurface(), self.__GROUND.getPOS())
+        # PLAYER HEALTH
+        ###################
+        for health_bar in self.__PLAYER.HEALTH_BAR:
+            self.__WINDOW.getSurface().blit(health_bar.getSurface(), health_bar.getPOS())
+        # PLAYER
+        self.__WINDOW.getSurface().blit(self.__PLAYER.getSurface(), self.__PLAYER.getPOS())
+
+        self.__WINDOW.updateFrames()
 
     def blitBossLevel(self):
         self.__WINDOW.ClearScreen()
@@ -360,15 +380,12 @@ class Engine:
         self.__WINDOW.getSurface().blit(self.__BG.getSurface(), self.__BG.getPOS())
         ##### BOSS - BLIT BEFORE PLAYER #####
         self.__WINDOW.getSurface().blit(self.__BOSS.getSurface(), self.__BOSS.getPOS())
-        # PLAYER
-        self.__WINDOW.getSurface().blit(self.__PLAYER.getSurface(), self.__PLAYER.getPOS())
+
         # PLATFORM
         for platform in self.__PLATFORMS:
             self.__WINDOW.getSurface().blit(platform.getSurface(), platform.getPOS())
         # ATTACK EFFECT
         self.__WINDOW.getSurface().blit(self.__PLAYER.ATTACK_EFFECT.getSurface(), self.__PLAYER.ATTACK_EFFECT.getPOS())
-        # THUMB
-        self.__WINDOW.getSurface().blit(self.__THUMB.getSurface(), self.__THUMB.getPOS())
         # FIRE HAND
         self.__WINDOW.getSurface().blit(self.__FIRE_HAND.getSurface(), self.__FIRE_HAND.getPOS())
         # GROUND
@@ -385,6 +402,10 @@ class Engine:
         self.__WINDOW.getSurface().blit(self.__LASER_BEAM.getSurface(), self.__LASER_BEAM.getPOS())
         # LASER HAND
         self.__WINDOW.getSurface().blit(self.__LASER_HAND.getSurface(), self.__LASER_HAND.getPOS())
+        # PLAYER
+        self.__WINDOW.getSurface().blit(self.__PLAYER.getSurface(), self.__PLAYER.getPOS())
+        # THUMB
+        self.__WINDOW.getSurface().blit(self.__THUMB.getSurface(), self.__THUMB.getPOS())
         # BOSS HEALTH
         for bar in self.__BOSS.HEALTH_BAR:
             self.__WINDOW.getSurface().blit(bar.getSurface(), bar.getPOS())
