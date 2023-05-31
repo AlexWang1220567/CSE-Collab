@@ -67,7 +67,7 @@ class Engine:
         self.__MUSIC_BOSS = pygame.mixer.Sound("sound_effects/PumpkinMoonLord.mp3")
         self.__MUSIC_HOME = pygame.mixer.Sound("sound_effects/The Caretaker - Everywhere at the end of time - 09 B3 - Quiet internal rebellions.mp3")
         self.__SLASH = pygame.mixer.Sound("sound_effects/short-fireball-woosh-6146.mp3")
-        self.__SLASH.set_volume(0.1)
+        self.__SLASH.set_volume(0.25)
 
     def initializeHands(self):
         ### Set scales
@@ -381,7 +381,7 @@ class Engine:
                 self.__AT_BOSS_LEVEL = False
                 # self.__AT_BOSS_LEVEL = False
             if len(self.__PLAYER.HEALTH_BAR) <= 0:
-                pass
+                self.__AT_BOSS_LEVEL = False
 
             ###### BLIT
             self.blitBossLevel()
