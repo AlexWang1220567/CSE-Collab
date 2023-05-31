@@ -61,9 +61,6 @@ class Boss(mySprite):
             (self.getWidth()*SCALE_X, self.getHeight()*SCALE_Y)
         )
 
-    def getHealth(self):
-        return self.__HEALTH
-
 
 
 
@@ -152,7 +149,7 @@ if __name__ == "__main__":
         WINDOW.ClearScreen()
         ##### BOSS - BLIT BEFORE PLAYER #####
         WINDOW.getSurface().blit(BOSS.getSurface(), BOSS.getPOS())
-        WINDOW.getSurface().blit(BOSS.BOSS_HEALTH_BAR.getSurface(), BOSS.BOSS_HEALTH_BAR.getPOS())
+
         # PLAYER
         WINDOW.getSurface().blit(PLAYER.getSurface(), PLAYER.getPOS())
         # PLATFORM

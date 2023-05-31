@@ -37,6 +37,13 @@ class Engine:
         self.initializeHands()
         self.__ATTACK_THUMB = True  # ATTACK
 
+        ### WHAT CAN DAMAGE THE PLAYER
+        self.__DANGER_LIST = []
+        self.__DANGER_LIST.append(self.__FIRE_1)
+        self.__DANGER_LIST.append(self.__FIRE_2)
+        self.__DANGER_LIST.append(self.__LASER_BEAM)
+        self.__DANGER_LIST.append(self.__THUMB)
+
         ### GROUND
         self.__GROUND = Platform(50, self.__WINDOW.getWidth())
         self.__GROUND.setPosition((0, self.__WINDOW.getHeight() - self.__GROUND.getHeight()))
@@ -146,7 +153,7 @@ class Engine:
             bar.setPosition((self.__BOSS.getPOS()[0] + BAR_COUNT * 20, self.__BOSS.getPOS()[1]))
             BAR_COUNT += 1
 
-    def startScreen(self):
+    def peacefulNight(self):
         ###################################################
         self.__MUSIC_HOME.play(-1)
         ###################################################
@@ -256,6 +263,7 @@ class Engine:
         time_since_laser = 0
         clock = pygame.time.Clock()
         boss_hit = False
+        player_hit = False
 
         ### POSITIONS
         self.setPositionsBossRoom()
@@ -336,8 +344,7 @@ class Engine:
             if self.__PLAYER.isSpriteColliding(self.__GROUND.getPOS(), self.__GROUND.getDiminsoins()):
                 self.__PLAYER.JUMPING_Y = 0
 
-            ######################### ATTACK
-
+            ######################### BOSS IMMUNITY FRAME
             if self.__BOSS.IMM_FRAME >= 500:
                 self.__BOSS.IMM_FRAME = 0
                 boss_hit = False
@@ -351,15 +358,38 @@ class Engine:
             if boss_hit:
                 self.__BOSS.IMM_FRAME += TIME
 
+            ######################### PLAYER IMMUNITY
+            if self.__PLAYER.IMM_FRAME >= 500:
+                self.__PLAYER.IMM_FRAME = 0
+                player_hit = False
+            ##### TAKES DAMAGE
+            for i in range(len(self.__DANGER_LIST)):
+                if self.__PLAYER.isSpriteColliding(self.__DANGER_LIST[i].getPOS(), self.__DANGER_LIST[i].getDiminsoins()) and \
+                        not player_hit:
+                    player_hit = True
+                    if len(self.__PLAYER.HEALTH_BAR) > 0:
+                        ######### if hit by the thumb, which is last in the list, take 3 pts damage
+                        if i == len(self.__DANGER_LIST)-1:
+                            self.__PLAYER.deductHealth(3)
+                        else:
+                            self.__PLAYER.deductHealth(1)
+            if player_hit:
+                self.__PLAYER.IMM_FRAME += TIME
+
             ################### END
             if len(self.__BOSS.HEALTH_BAR) <= 0:
-                pass
+                self.__AT_BOSS_LEVEL = False
                 # self.__AT_BOSS_LEVEL = False
             if len(self.__PLAYER.HEALTH_BAR) <= 0:
                 pass
 
             ###### BLIT
             self.blitBossLevel()
+
+        self.winScreen()
+
+    def winScreen(self):
+        pass
 
     def blitPeacefulNight(self):
         self.__WINDOW.ClearScreen()
@@ -420,7 +450,7 @@ class Engine:
 if __name__ == "__main__":
     pygame.init()
     GAME = Engine()
-    GAME.startScreen()
+    GAME.peacefulNight()
 
 
 

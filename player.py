@@ -55,8 +55,15 @@ class Player(mySprite):
         self.WALK_TIME_ELAPSED = 0
 
 
-    def deductHealth(self):
-        self.HEALTH_BAR.pop(len(self.HEALTH_BAR)-1)
+    def deductHealth(self, DAMAGE):
+        if DAMAGE == 1:
+            self.HEALTH_BAR.pop(len(self.HEALTH_BAR)-1)
+        ### 3 pts damage
+        else:
+            for i in range(3):
+                if len(self.HEALTH_BAR)>0:
+                    self.HEALTH_BAR.pop(len(self.HEALTH_BAR)-1)
+
 
 
     def setSprite(self, KEYS_PRESSED):
@@ -144,8 +151,8 @@ class Player(mySprite):
     def isFallOnPlatform(self, POSITION, DIMINSION):
         """
         detect if the player is FALLING on platform
-        :param POS: tuple
-        :param DIM: tuple
+        :param POSITION: tuple
+        :param DIMINSION: tuple
         :return: bool
         """
         SPRITE_X = POSITION[0]
