@@ -59,11 +59,8 @@ class Engine:
         pygame.mixer.init()
         self.__MUSIC_BOSS = pygame.mixer.Sound("sound_effects/PumpkinMoonLord.mp3")
         self.__MUSIC_HOME = pygame.mixer.Sound("sound_effects/The Caretaker - Everywhere at the end of time - 09 B3 - Quiet internal rebellions.mp3")
-        self.__SOUND_THUMB_FALL = pygame.mixer.Sound("sound_effects/short-fireball-woosh-6146.mp3")
-        self.__SOUND_THUMB_FALL.set_volume(0.5)
-        #self.__SOUND_FIRE = pygame.mixer.Sound("sound_effects/short-fireball-woosh-6146.mp3")
-        # firstSound.play()
-        # secondSound.play()
+        self.__SLASH = pygame.mixer.Sound("sound_effects/short-fireball-woosh-6146.mp3")
+        self.__SLASH.set_volume(0.1)
 
     def initializeHands(self):
         ### Set scales
@@ -219,6 +216,9 @@ class Engine:
             COLLIDING_PLATFORM = 0
             # JUMP
             if self.__PLAYER.IS_JUMPING:
+                ##############################
+                self.__SLASH.play(0)
+                ##############################
                 self.__PLAYER.jumpPlayer()
                 self.__PLAYER.ATTACK_EFFECT.setPosition(
                     (self.__PLAYER.getPOS()[0] + self.__PLAYER.getWidth(), self.__PLAYER.getPOS()[1]))
@@ -239,6 +239,7 @@ class Engine:
                 self.__PLAYER.JUMPING_Y = 0
 
             self.blitPeacefulNight()
+
             if self.__PLAYER.getPOS()[0] > (self.__WINDOW.getWidth() * (9/10)):
                 self.__AT_START_LEVEL = False
         self.bossRoom()
@@ -246,7 +247,7 @@ class Engine:
     def bossRoom(self):
 
         #####################################
-        self.__MUSIC_HOME.fadeout(1000)
+        self.__MUSIC_HOME.stop()
         self.__MUSIC_BOSS.play(-1)
         #####################################
 
@@ -315,6 +316,9 @@ class Engine:
             COLLIDING_PLATFORM = 0
             # JUMP
             if self.__PLAYER.IS_JUMPING:
+                ##############################
+                self.__SLASH.play(0)
+                ##############################
                 self.__PLAYER.jumpPlayer()
                 self.__PLAYER.ATTACK_EFFECT.setPosition((self.__PLAYER.getPOS()[0] + self.__PLAYER.getWidth(), self.__PLAYER.getPOS()[1]))
             else:
