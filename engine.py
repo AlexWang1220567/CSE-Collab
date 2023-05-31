@@ -62,7 +62,7 @@ class Engine:
         self.__THUMB.setScale(1.2)
 
         ### Set SPD
-        self.__LASER_HAND.setSPD(5)
+        self.__LASER_HAND.setSPD(3)
         self.__FIRE_2.setSPD(5)
         self.__FIRE_2.setSPD_Y(3)
         self.__FIRE_1.setSPD(5)
