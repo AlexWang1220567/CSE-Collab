@@ -61,6 +61,8 @@ class Engine:
         self.__BG_PEACEFUL_NIGHT = ImageSprite("sprite_images/BG_PEACEFUL_NIGHT.png")
         self.__BG.setScale(2)
         self.__BG_PEACEFUL_NIGHT.setScale(2)
+        ### INTRO
+        self.__TITLE_1 = ImageSprite("sprite_images/SAGE_TITLE_1.png")
 
         ### MUSIC
         pygame.mixer.init()
@@ -252,6 +254,9 @@ class Engine:
             if self.__PLAYER.getPOS()[0] > (self.__WINDOW.getWidth() * (9/10)):
                 self.__AT_START_LEVEL = False
         self.bossRoom()
+
+    def bossIntro(self):
+        pass
 
     def bossRoom(self):
 
