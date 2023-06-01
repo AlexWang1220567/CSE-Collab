@@ -65,9 +65,11 @@ class Engine:
         ### MUSIC
         pygame.mixer.init()
         self.__MUSIC_BOSS = pygame.mixer.Sound("sound_effects/PumpkinMoonLord.mp3")
+        self.__MUSIC_BOSS.set_volume(0.5)
         self.__MUSIC_HOME = pygame.mixer.Sound("sound_effects/The Caretaker - Everywhere at the end of time - 09 B3 - Quiet internal rebellions.mp3")
-        self.__SLASH = pygame.mixer.Sound("sound_effects/short-fireball-woosh-6146.mp3")
-        self.__SLASH.set_volume(0.25)
+        self.__SLASH = pygame.mixer.Sound("sound_effects/swinging-staff-whoosh-strong-08-44658.mp3")
+        self.__SLASH.set_volume(0.1)
+        self.__HIT = pygame.mixer.Sound("sound_effects/punch-140236.mp3")
 
     def initializeHands(self):
         ### Set scales
@@ -354,6 +356,7 @@ class Engine:
                 boss_hit = True
                 if len(self.__BOSS.HEALTH_BAR) > 0:
                     self.__BOSS.deductHealth()
+                    self.__HIT.play(0)
 
             if boss_hit:
                 self.__BOSS.IMM_FRAME += TIME
