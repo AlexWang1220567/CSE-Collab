@@ -62,14 +62,21 @@ class Engine:
         self.__BG.setScale(2)
         self.__BG_PEACEFUL_NIGHT.setScale(2)
         ### INTRO
-        self.__TITLE_1 = ImageSprite("sprite_images/SAGE_TITLE_1.png")
+        self.__INTRO_IMAGES = []
+        self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_3.png"))
+        self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_2.png"))
+        self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_4.png"))
+        self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_1.png"))
+        self.__DRUM_KICKS = pygame.mixer.Sound("sound_effects/safari-kick-2-37314.mp3")
+        self.__DRUM_KICKS.set_volume(2)
 
         ### MUSIC
         pygame.mixer.init()
         self.__MUSIC_BOSS = pygame.mixer.Sound("sound_effects/PumpkinMoonLord.mp3")
-        self.__MUSIC_BOSS.set_volume(0.5)
+        #self.__MUSIC_BOSS.set_volume(1)
         self.__MUSIC_HOME = pygame.mixer.Sound("sound_effects/The Caretaker - Everywhere at the end of time - 09 B3 - Quiet internal rebellions.mp3")
         self.__SLASH = pygame.mixer.Sound("sound_effects/swinging-staff-whoosh-strong-08-44658.mp3")
+        self.__MUSIC_HOME.set_volume(0.5)
         self.__SLASH.set_volume(0.1)
         self.__HIT = pygame.mixer.Sound("sound_effects/punch-140236.mp3")
 
@@ -253,17 +260,46 @@ class Engine:
 
             if self.__PLAYER.getPOS()[0] > (self.__WINDOW.getWidth() * (9/10)):
                 self.__AT_START_LEVEL = False
-        self.bossRoom()
+        self.bossIntro()
 
     def bossIntro(self):
-        pass
-
-    def bossRoom(self):
-
         #####################################
         self.__MUSIC_HOME.stop()
         self.__MUSIC_BOSS.play(-1)
         #####################################
+        clock = pygame.time.Clock()
+        intro = True
+        time_since_frame = 0
+        index = 0
+        self.__DRUM_KICKS.play(0)
+        while intro:
+            ### INPUT
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            TIME = clock.tick()
+            time_since_frame += TIME
+            if time_since_frame >= 400:
+                self.__DRUM_KICKS.stop()
+                self.__DRUM_KICKS.play(0)
+                index += 1
+                time_since_frame = 0
+            if index <= 3:
+                self.__WINDOW.ClearScreen()
+                ###### BG
+                self.__WINDOW.getSurface().blit(self.__INTRO_IMAGES[index].getSurface(),
+                                                    self.__INTRO_IMAGES[index].getPOS())
+                self.__WINDOW.updateFrames()
+            else:
+                intro = False
+
+        self.bossRoom()
+
+
+    def bossRoom(self):
+
+
 
         ### HANDS
         time_since_fall = 0
@@ -332,6 +368,7 @@ class Engine:
             # JUMP
             if self.__PLAYER.IS_JUMPING:
                 ##############################
+                self.__SLASH.stop()
                 self.__SLASH.play(0)
                 ##############################
                 self.__PLAYER.jumpPlayer()
