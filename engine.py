@@ -3,6 +3,8 @@ title: the engine class
 author: Mengqi Wang, Pushkar Talwar
 date-created: 05/12/2023
 """
+import time
+
 import pygame
 from boss import Boss
 from platform import Platform
@@ -56,6 +58,7 @@ class Engine:
         ### LEVELS
         self.__AT_BOSS_LEVEL = True
         self.__AT_START_LEVEL = True
+        self.__WIN = False
         ### BG
         self.__BG = ImageSprite("sprite_images/BG.png")
         self.__BG_PEACEFUL_NIGHT = ImageSprite("sprite_images/BG_PEACEFUL_NIGHT.png")
@@ -423,6 +426,7 @@ class Engine:
 
             ################### END
             if len(self.__BOSS.HEALTH_BAR) <= 0:
+                self.__WIN = True
                 self.__AT_BOSS_LEVEL = False
                 # self.__AT_BOSS_LEVEL = False
             if len(self.__PLAYER.HEALTH_BAR) <= 0:
@@ -430,10 +434,46 @@ class Engine:
 
             ###### BLIT
             self.blitBossLevel()
-
-        self.winScreen()
+        if self.__WIN:
+            time.sleep(1)
+            self.winScreen()
+        elif not self.__WIN:
+            time.sleep(0.5)
+            self.deathScreen()
 
     def winScreen(self):
+        #####################################
+        self.__MUSIC_HOME.stop()
+        self.__MUSIC_BOSS.play(-1)
+        #####################################
+        clock = pygame.time.Clock()
+        intro = True
+        time_since_frame = 0
+        index = 0
+        self.__DRUM_KICKS.play(0)
+        while intro:
+            ### INPUT
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            TIME = clock.tick()
+            time_since_frame += TIME
+            if time_since_frame >= 400:
+                self.__DRUM_KICKS.stop()
+                self.__DRUM_KICKS.play(0)
+                index += 1
+                time_since_frame = 0
+            if index <= 3:
+                self.__WINDOW.ClearScreen()
+                ###### BG
+                self.__WINDOW.getSurface().blit(self.__INTRO_IMAGES[index].getSurface(),
+                                                self.__INTRO_IMAGES[index].getPOS())
+                self.__WINDOW.updateFrames()
+            else:
+                intro = False
+
+    def deathScreen(self):
         pass
 
     def blitPeacefulNight(self):
