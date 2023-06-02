@@ -34,7 +34,7 @@ class Boss(mySprite):
         self.IMM_FRAME = 0
         ###################
         self.HEALTH_BAR = []
-        for i in range(25):
+        for i in range(5):
             BAR = Platform(15, 10)
             BAR.setColor((250, 100, 100))
             self.HEALTH_BAR.append(BAR)
