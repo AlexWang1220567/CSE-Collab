@@ -285,7 +285,9 @@ class Engine:
             time_since_frame += TIME
             if time_since_frame >= 400:
                 self.__DRUM_KICKS.stop()
+                #############################
                 self.__DRUM_KICKS.play(0)
+                #############################
                 index += 1
                 time_since_frame = 0
             if index <= 3:
@@ -438,7 +440,7 @@ class Engine:
             time.sleep(1)
             self.winScreen()
         elif not self.__WIN:
-            time.sleep(0.5)
+            time.sleep(1)
             self.deathScreen()
 
     def winScreen(self):
