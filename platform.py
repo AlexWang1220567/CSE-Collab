@@ -15,29 +15,8 @@ class Platform(mySprite):
         self._SURFACE.fill(self._COLOR)
         self.HIT_BOX = pygame.Rect(self.getPOS()[0], self.getDiminsoins()[0], self.getPOS()[1], self.getDiminsoins()[1])
 
-    """def isCollidingPlatform(self, OTHER_SPRITE, POSITION, DIMINSION):
 
-        SPRITE_W = DIMINSION[0]
-        SPRITE_H = DIMINSION[1]
-        SPRITE_X = POSITION[0]
-        SPRITE_Y = POSITION[1]
-
-        if SPRITE_X >= self._X - SPRITE_W and SPRITE_X <= self._X + self.getWidth():
-            if SPRITE_Y >= self._Y - SPRITE_H and SPRITE_Y <= self._Y + self.getHeight():
-                if abs(OTHER_SPRITE.HIT_BOX.bottom - self.HIT_BOX.top) < 10:
-                    return True
-                if abs(OTHER_SPRITE.HIT_BOX.top - self.HIT_BOX.bottom) < 10:
-                    return True
-                if abs(OTHER_SPRITE.HIT_BOX.left - self.HIT_BOX.right) < 10:
-                    OTHER_SPRITE._X = self.getPOS()[0] - OTHER_SPRITE.getWidth()
-                    return True
-                if abs(OTHER_SPRITE.HIT_BOX.right - self.HIT_BOX.left) < 10:
-                    OTHER_SPRITE._X = self.getPOS()[0] + self.getWidth()
-                    return True
-        return False"""
-
-
-class PlatfromPlacement():
+class PlatformPlacement():
     def __init__(self):
         pass
 

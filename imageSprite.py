@@ -18,6 +18,8 @@ class ImageSprite(mySprite):
         # self._SURFACE = pygame.image.load("sprite_images/PumpkinSage.png")
         self.__X_FLIP = False
 
+    ### MODIFIERS
+
     def setFlipX(self):
         """
         Flip image on the Y axis

@@ -23,6 +23,7 @@ class HandEnemy(mySprite):
         self._SURFACE = pygame.image.load(self.__FILE_LOC).convert_alpha()
         self.__X_FLIP = True
 
+    ### MODIFIERS
     def setSprite(self, SPRITE):
         NEW_SPRITE = SPRITE
         self._SURFACE = pygame.image.load(NEW_SPRITE).convert_alpha()
@@ -101,6 +102,7 @@ class Laser(mySprite):
         self._SURFACE = pygame.image.load(self.__FILE_LOC).convert_alpha()
         self.__X_FLIP = False
         self._SPD_Y = SPD
+    ### MODIFIERS
 
     def set_X_Flip(self, BOOL=True):
         self.__X_FLIP = BOOL

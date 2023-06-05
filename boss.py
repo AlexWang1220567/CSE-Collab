@@ -41,10 +41,9 @@ class Boss(mySprite):
 
         ####################
 
+    ### MODIFIERS
     def deductHealth(self):
         self.HEALTH_BAR.pop(0)
-
-
 
     def setScale(self, SCALE_X, SCALE_Y=0):
         """

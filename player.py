@@ -28,10 +28,8 @@ class Player(mySprite):
         self.ATTACK_SPRITE = pygame.image.load("sprite_images/attack.png").convert_alpha()
         self.ATTACK_EFFECT = ImageSprite("sprite_images/cut.png")
         self.ATTACK_EFFECT.setPosition((5000,5000))
-        # self.ATTACK_EFFECT.append(pygame.image.load("sprite_images/cut.png").convert_alpha())
 
         self.__JUMP_HEIGHT = 230
-
 
         ####################
         self.IMM_FRAME = 0
@@ -42,14 +40,11 @@ class Player(mySprite):
             BAR.setColor((250, 100, 100))
             self.HEALTH_BAR.append(BAR)
 
-        ####################
-
-
-
         self.setSPD(5)
 
         self.WALK_TIME_ELAPSED = 0
 
+    ### MODIFIERS
 
     def deductHealth(self, DAMAGE):
         if DAMAGE == 1:
@@ -144,6 +139,7 @@ class Player(mySprite):
         """
         self._SURFACE = pygame.transform.flip(self._SURFACE, True, False)
 
+    ### ACCESSORS
     def isFallOnPlatform(self, POSITION, DIMINSION):
         """
         detect if the player is FALLING on platform
