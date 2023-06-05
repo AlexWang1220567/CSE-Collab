@@ -70,7 +70,7 @@ class Engine:
         ### LIVE
         self.__EXPLOSION = ImageSprite("sprite_images/Explosion (1).png")
         self.__EXPLOSION.setScale(3)
-        self.__EXPLOSION_SOUND = pygame.mixer.Sound("sound_effects/vcf-kick-sine-81492.mp3")
+        self.__EXPLOSION_SOUND = pygame.mixer.Sound("sound_effects/hq-explosion-6288.mp3")
         ### INTRO
         self.__INTRO_IMAGES = []
         self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_3.png"))
@@ -478,25 +478,29 @@ class Engine:
                     quit()
             TIME = clock.tick()
             time_since_frame += TIME
-            if time_since_frame >= 180:
-                self.__EXPLOSION_SOUND.stop()
-                self.__EXPLOSION_SOUND.play(0)
-                time_since_frame = 0
-                # EXPLOSION
-                explosion_counter += 1
-                self.__EXPLOSION.setPosition((randrange(self.__BOSS.getPOS()[0],
-                                                        self.__BOSS.getPOS()[0]+
-                                                        self.__BOSS.getWidth() - 250),
-                                              randrange(self.__BOSS.getPOS()[1],
-                                                        self.__BOSS.getPOS()[1]+
-                                                        self.__BOSS.getHeight() - 250)))
-            if explosion_counter >= 10:
-                explode = False
-            self.__WINDOW.ClearScreen()
-            self.blitBossLevel()
-            self.__WINDOW.getSurface().blit(self.__EXPLOSION.getSurface(),
-                                            self.__EXPLOSION.getPOS())
-            self.__WINDOW.updateFrames()
+            if explosion_counter < 10:
+                if time_since_frame >= 150:
+                    self.__EXPLOSION_SOUND.stop()
+                    self.__EXPLOSION_SOUND.play(0)
+                    time_since_frame = 0
+                    # EXPLOSION
+                    explosion_counter += 1
+                    self.__EXPLOSION.setPosition((randrange(self.__BOSS.getPOS()[0],
+                                                            self.__BOSS.getPOS()[0]+
+                                                            self.__BOSS.getWidth() - 250),
+                                                  randrange(self.__BOSS.getPOS()[1],
+                                                            self.__BOSS.getPOS()[1]+
+                                                            self.__BOSS.getHeight() - 250)))
+                self.__WINDOW.ClearScreen()
+                self.blitBossLevel()
+                self.__WINDOW.getSurface().blit(self.__EXPLOSION.getSurface(),
+                                                self.__EXPLOSION.getPOS())
+                self.__WINDOW.updateFrames()
+            else:
+                self.__WINDOW.ClearScreen()
+                self.__WINDOW.getSurface().blit(self.__INTRO_IMAGES[0].getSurface(), self.__INTRO_IMAGES[0].getPOS())
+                self.__WINDOW.updateFrames()
+
 
 
     def deathScreen(self):
