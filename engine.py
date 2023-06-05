@@ -66,6 +66,8 @@ class Engine:
         self.__BG_PEACEFUL_NIGHT.setScale(2)
         ### DEATH
         self.__DEATH_BG = ImageSprite("sprite_images/DEATH.png")
+        ### LIVE
+        self.__EXPLOSION = ImageSprite("sprite_images/Explosion.png")
         ### INTRO
         self.__INTRO_IMAGES = []
         self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_3.png"))
@@ -449,14 +451,13 @@ class Engine:
 
     def winScreen(self):
         #####################################
-        self.__MUSIC_HOME.stop()
-        self.__MUSIC_BOSS.play(-1)
+        self.__MUSIC_BOSS.stop()
         #####################################
         clock = pygame.time.Clock()
         intro = True
         time_since_frame = 0
-        index = 0
         self.__DRUM_KICKS.play(0)
+        explosion_counter = 0
         while intro:
             ### INPUT
             for event in pygame.event.get():
@@ -468,16 +469,9 @@ class Engine:
             if time_since_frame >= 400:
                 self.__DRUM_KICKS.stop()
                 self.__DRUM_KICKS.play(0)
-                index += 1
                 time_since_frame = 0
-            if index <= 3:
-                self.__WINDOW.ClearScreen()
-                ###### BG
-                self.__WINDOW.getSurface().blit(self.__INTRO_IMAGES[index].getSurface(),
-                                                self.__INTRO_IMAGES[index].getPOS())
-                self.__WINDOW.updateFrames()
-            else:
-                intro = False
+            self.blitBossLevel()
+
 
     def deathScreen(self):
         #####################################
