@@ -64,6 +64,8 @@ class Engine:
         self.__BG_PEACEFUL_NIGHT = ImageSprite("sprite_images/BG_PEACEFUL_NIGHT.png")
         self.__BG.setScale(2)
         self.__BG_PEACEFUL_NIGHT.setScale(2)
+        ### DEATH
+        self.__DEATH_BG = ImageSprite("sprite_images/DEATH.png")
         ### INTRO
         self.__INTRO_IMAGES = []
         self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_3.png"))
@@ -72,6 +74,7 @@ class Engine:
         self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_1.png"))
         self.__DRUM_KICKS = pygame.mixer.Sound("sound_effects/safari-kick-2-37314.mp3")
         self.__DRUM_KICKS.set_volume(2)
+
 
         ### MUSIC
         pygame.mixer.init()
@@ -82,6 +85,7 @@ class Engine:
         self.__MUSIC_HOME.set_volume(0.5)
         self.__SLASH.set_volume(0.1)
         self.__HIT = pygame.mixer.Sound("sound_effects/punch-140236.mp3")
+        self.__DEATH_SOUND = pygame.mixer.Sound("sound_effects/deathScene.mp3")
 
     def initializeHands(self):
         ### Set scales
@@ -476,7 +480,21 @@ class Engine:
                 intro = False
 
     def deathScreen(self):
-        pass
+        #####################################
+        self.__MUSIC_BOSS.fadeout(3000)
+        self.__DEATH_SOUND.play(0)
+        #####################################
+        while True:
+            ### INPUT
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            self.__WINDOW.ClearScreen()
+            ###### BG
+            self.__WINDOW.getSurface().blit(self.__DEATH_BG.getSurface(),
+                                            self.__DEATH_BG.getPOS())
+            self.__WINDOW.updateFrames()
 
     def blitPeacefulNight(self):
         self.__WINDOW.ClearScreen()
