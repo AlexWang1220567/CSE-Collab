@@ -3,6 +3,7 @@ title: the engine class
 author: Mengqi Wang, Pushkar Talwar
 date-created: 05/12/2023
 """
+import random
 import time
 
 import pygame
@@ -67,7 +68,9 @@ class Engine:
         ### DEATH
         self.__DEATH_BG = ImageSprite("sprite_images/DEATH.png")
         ### LIVE
-        self.__EXPLOSION = ImageSprite("sprite_images/Explosion.png")
+        self.__EXPLOSION = ImageSprite("sprite_images/Explosion (1).png")
+        self.__EXPLOSION.setScale(3)
+        self.__EXPLOSION_SOUND = pygame.mixer.Sound("sound_effects/vcf-kick-sine-81492.mp3")
         ### INTRO
         self.__INTRO_IMAGES = []
         self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_3.png"))
@@ -441,7 +444,9 @@ class Engine:
                 self.__AT_BOSS_LEVEL = False
 
             ###### BLIT
+            self.__WINDOW.ClearScreen()
             self.blitBossLevel()
+            self.__WINDOW.updateFrames()
         if self.__WIN:
             time.sleep(1)
             self.winScreen()
@@ -450,15 +455,22 @@ class Engine:
             self.deathScreen()
 
     def winScreen(self):
+        from random import randrange
         #####################################
         self.__MUSIC_BOSS.stop()
         #####################################
         clock = pygame.time.Clock()
-        intro = True
+        explode = True
         time_since_frame = 0
-        self.__DRUM_KICKS.play(0)
+        self.__EXPLOSION_SOUND.play(0)
         explosion_counter = 0
-        while intro:
+        self.__EXPLOSION.setPosition((randrange(self.__BOSS.getPOS()[0],
+                                                self.__BOSS.getPOS()[0] +
+                                                self.__BOSS.getWidth() - 250),
+                                      randrange(self.__BOSS.getPOS()[1],
+                                                self.__BOSS.getPOS()[1] +
+                                                self.__BOSS.getHeight() - 250)))
+        while explode:
             ### INPUT
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -466,11 +478,25 @@ class Engine:
                     quit()
             TIME = clock.tick()
             time_since_frame += TIME
-            if time_since_frame >= 400:
-                self.__DRUM_KICKS.stop()
-                self.__DRUM_KICKS.play(0)
+            if time_since_frame >= 180:
+                self.__EXPLOSION_SOUND.stop()
+                self.__EXPLOSION_SOUND.play(0)
                 time_since_frame = 0
+                # EXPLOSION
+                explosion_counter += 1
+                self.__EXPLOSION.setPosition((randrange(self.__BOSS.getPOS()[0],
+                                                        self.__BOSS.getPOS()[0]+
+                                                        self.__BOSS.getWidth() - 250),
+                                              randrange(self.__BOSS.getPOS()[1],
+                                                        self.__BOSS.getPOS()[1]+
+                                                        self.__BOSS.getHeight() - 250)))
+            if explosion_counter >= 10:
+                explode = False
+            self.__WINDOW.ClearScreen()
             self.blitBossLevel()
+            self.__WINDOW.getSurface().blit(self.__EXPLOSION.getSurface(),
+                                            self.__EXPLOSION.getPOS())
+            self.__WINDOW.updateFrames()
 
 
     def deathScreen(self):
@@ -508,7 +534,7 @@ class Engine:
         self.__WINDOW.updateFrames()
 
     def blitBossLevel(self):
-        self.__WINDOW.ClearScreen()
+
         ###### BG
         self.__WINDOW.getSurface().blit(self.__BG.getSurface(), self.__BG.getPOS())
         ##### BOSS - BLIT BEFORE PLAYER #####
@@ -543,7 +569,6 @@ class Engine:
         for bar in self.__BOSS.HEALTH_BAR:
             self.__WINDOW.getSurface().blit(bar.getSurface(), bar.getPOS())
 
-        self.__WINDOW.updateFrames()
 
 
 if __name__ == "__main__":
