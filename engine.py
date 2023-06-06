@@ -67,11 +67,12 @@ class Engine:
         self.__BG_PEACEFUL_NIGHT.setScale(2)
         ### DEATH
         self.__DEATH_BG = ImageSprite("sprite_images/DEATH.png")
-        ### LIVE
+        ### LIVES
         self.__EXPLOSION = ImageSprite("sprite_images/2_explosion.png")
         self.__EXPLOSION.setScale(3)
         self.__EXPLOSION_SOUND = pygame.mixer.Sound("sound_effects/hq-explosion-6288.mp3")
         self.__END_SOUND = pygame.mixer.Sound("sound_effects/thehand.mp3")
+        self.__THIS_IS_NOT_MTH = ImageSprite("sprite_images/ThisIsNotMth.png")
         ### INTRO
         self.__INTRO_IMAGES = []
         self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_3.png"))
@@ -450,10 +451,32 @@ class Engine:
             self.__WINDOW.updateFrames()
         if self.__WIN:
             time.sleep(1)
+            self.notMth()
             self.winScreen()
         elif not self.__WIN:
             time.sleep(1)
             self.deathScreen()
+
+    def notMth(self):
+        math = True
+        clock = pygame.time.Clock()
+        time_since_frame = 0
+        while math:
+            ### INPUT
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            TIME = clock.tick()
+            time_since_frame += TIME
+            if time_since_frame >= 2000:
+                math = False
+            self.__WINDOW.ClearScreen()
+            self.__WINDOW.getSurface().blit(self.__THIS_IS_NOT_MTH.getSurface(),
+                                            self.__THIS_IS_NOT_MTH.getPOS())
+            self.__WINDOW.updateFrames()
+
+
 
     def winScreen(self):
         from random import randrange
@@ -482,7 +505,9 @@ class Engine:
             time_since_frame += TIME
             if explosion_counter < 16:
                 if time_since_frame >= 110:
-                    self.__EXPLOSION.setFlipX()
+                    flip = randrange(0,1)
+                    if flip == 0:
+                        self.__EXPLOSION.setFlipX()
                     self.__EXPLOSION_SOUND.stop()
                     self.__EXPLOSION_SOUND.play(0)
                     time_since_frame = 0
