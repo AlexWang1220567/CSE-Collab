@@ -68,9 +68,10 @@ class Engine:
         ### DEATH
         self.__DEATH_BG = ImageSprite("sprite_images/DEATH.png")
         ### LIVE
-        self.__EXPLOSION = ImageSprite("sprite_images/Explosion (1).png")
+        self.__EXPLOSION = ImageSprite("sprite_images/2_explosion.png")
         self.__EXPLOSION.setScale(3)
         self.__EXPLOSION_SOUND = pygame.mixer.Sound("sound_effects/hq-explosion-6288.mp3")
+        self.__END_SOUND = pygame.mixer.Sound("sound_effects/thehand.mp3")
         ### INTRO
         self.__INTRO_IMAGES = []
         self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_3.png"))
@@ -87,7 +88,7 @@ class Engine:
         #self.__MUSIC_BOSS.set_volume(1)
         self.__MUSIC_HOME = pygame.mixer.Sound("sound_effects/The Caretaker - Everywhere at the end of time - 09 B3 - Quiet internal rebellions.mp3")
         self.__SLASH = pygame.mixer.Sound("sound_effects/swinging-staff-whoosh-strong-08-44658.mp3")
-        self.__MUSIC_HOME.set_volume(0.5)
+        self.__MUSIC_HOME.set_volume(0.1)
         self.__SLASH.set_volume(0.1)
         self.__HIT = pygame.mixer.Sound("sound_effects/punch-140236.mp3")
         self.__DEATH_SOUND = pygame.mixer.Sound("sound_effects/deathScene.mp3")
@@ -466,10 +467,11 @@ class Engine:
         explosion_counter = 0
         self.__EXPLOSION.setPosition((randrange(self.__BOSS.getPOS()[0],
                                                 self.__BOSS.getPOS()[0] +
-                                                self.__BOSS.getWidth() - 250),
+                                                self.__BOSS.getWidth() - 300),
                                       randrange(self.__BOSS.getPOS()[1],
                                                 self.__BOSS.getPOS()[1] +
-                                                self.__BOSS.getHeight() - 250)))
+                                                self.__BOSS.getHeight() - 300)))
+        end = True
         while explode:
             ### INPUT
             for event in pygame.event.get():
@@ -478,8 +480,9 @@ class Engine:
                     quit()
             TIME = clock.tick()
             time_since_frame += TIME
-            if explosion_counter < 10:
-                if time_since_frame >= 150:
+            if explosion_counter < 16:
+                if time_since_frame >= 110:
+                    self.__EXPLOSION.setFlipX()
                     self.__EXPLOSION_SOUND.stop()
                     self.__EXPLOSION_SOUND.play(0)
                     time_since_frame = 0
@@ -487,16 +490,19 @@ class Engine:
                     explosion_counter += 1
                     self.__EXPLOSION.setPosition((randrange(self.__BOSS.getPOS()[0],
                                                             self.__BOSS.getPOS()[0]+
-                                                            self.__BOSS.getWidth() - 250),
+                                                            self.__BOSS.getWidth() - 300),
                                                   randrange(self.__BOSS.getPOS()[1],
                                                             self.__BOSS.getPOS()[1]+
-                                                            self.__BOSS.getHeight() - 250)))
+                                                            self.__BOSS.getHeight() - 300)))
                 self.__WINDOW.ClearScreen()
                 self.blitBossLevel()
                 self.__WINDOW.getSurface().blit(self.__EXPLOSION.getSurface(),
                                                 self.__EXPLOSION.getPOS())
                 self.__WINDOW.updateFrames()
             else:
+                if end:
+                    self.__END_SOUND.play(0)
+                    end = False
                 self.__WINDOW.ClearScreen()
                 self.__WINDOW.getSurface().blit(self.__INTRO_IMAGES[0].getSurface(), self.__INTRO_IMAGES[0].getPOS())
                 self.__WINDOW.updateFrames()
