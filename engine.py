@@ -182,9 +182,7 @@ class Engine:
             BAR_COUNT += 1
 
     def peacefulNight(self):
-        ###################################################
-        self.__MUSIC_HOME.play(-1)
-        ###################################################
+
         BAR_COUNT = 0
         for bar in self.__PLAYER.HEALTH_BAR:
             BAR_COUNT += 1
@@ -316,6 +314,9 @@ class Engine:
         self.bossRoom()
 
     def titleScreen(self):
+        ###################################################
+        self.__MUSIC_HOME.play(-1)
+        ###################################################
         title = True
         while title:
             ### INPUT
