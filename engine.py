@@ -65,14 +65,17 @@ class Engine:
         self.__BG_PEACEFUL_NIGHT = ImageSprite("sprite_images/BG_PEACEFUL_NIGHT.png")
         self.__BG.setScale(2)
         self.__BG_PEACEFUL_NIGHT.setScale(2)
+        ### TITLE SCREEN
+        self.__MAIN_TITLE = ImageSprite("sprite_images/main_title.png")
         ### DEATH
         self.__DEATH_BG = ImageSprite("sprite_images/DEATH.png")
         ### LIVES
         self.__EXPLOSION = ImageSprite("sprite_images/2_explosion.png")
-        self.__EXPLOSION.setScale(3)
+        self.__EXPLOSION.setScale(4)
         self.__EXPLOSION_SOUND = pygame.mixer.Sound("sound_effects/hq-explosion-6288.mp3")
         self.__END_SOUND = pygame.mixer.Sound("sound_effects/thehand.mp3")
         self.__THIS_IS_NOT_MTH = ImageSprite("sprite_images/ThisIsNotMth.png")
+        self.__NOT_MATH_SOUND = pygame.mixer.Sound("sound_effects/ThisIsNotMath.mp3")
         ### INTRO
         self.__INTRO_IMAGES = []
         self.__INTRO_IMAGES.append(ImageSprite("sprite_images/SAGE_TITLE_3.png"))
@@ -90,7 +93,7 @@ class Engine:
         self.__MUSIC_HOME = pygame.mixer.Sound("sound_effects/The Caretaker - Everywhere at the end of time - 09 B3 - Quiet internal rebellions.mp3")
         self.__SLASH = pygame.mixer.Sound("sound_effects/swinging-staff-whoosh-strong-08-44658.mp3")
         self.__MUSIC_HOME.set_volume(0.1)
-        self.__SLASH.set_volume(0.1)
+        self.__SLASH.set_volume(0.05)
         self.__HIT = pygame.mixer.Sound("sound_effects/punch-140236.mp3")
         self.__DEATH_SOUND = pygame.mixer.Sound("sound_effects/deathScene.mp3")
 
@@ -312,6 +315,23 @@ class Engine:
 
         self.bossRoom()
 
+    def titleScreen(self):
+        title = True
+        while title:
+            ### INPUT
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            PRESSED_KEYS = pygame.key.get_pressed()
+            if PRESSED_KEYS[pygame.K_SPACE]:
+                time.sleep(1)
+                title = False
+            self.__WINDOW.ClearScreen()
+            self.__WINDOW.getSurface().blit(self.__MAIN_TITLE.getSurface(), self.__MAIN_TITLE.getPOS())
+            self.__WINDOW.updateFrames()
+        self.peacefulNight()
+
 
     def bossRoom(self):
 
@@ -439,10 +459,12 @@ class Engine:
 
             ################### END
             if len(self.__BOSS.HEALTH_BAR) <= 0:
+                self.__MUSIC_BOSS.fadeout(2000)
                 self.__WIN = True
                 self.__AT_BOSS_LEVEL = False
                 # self.__AT_BOSS_LEVEL = False
             if len(self.__PLAYER.HEALTH_BAR) <= 0:
+                self.__MUSIC_BOSS.fadeout(3000)
                 self.__AT_BOSS_LEVEL = False
 
             ###### BLIT
@@ -450,7 +472,7 @@ class Engine:
             self.blitBossLevel()
             self.__WINDOW.updateFrames()
         if self.__WIN:
-            time.sleep(1)
+            time.sleep(2)
             self.notMth()
             self.winScreen()
         elif not self.__WIN:
@@ -461,6 +483,10 @@ class Engine:
         math = True
         clock = pygame.time.Clock()
         time_since_frame = 0
+        ###################################
+        self.__MUSIC_BOSS.stop()
+        self.__NOT_MATH_SOUND.play()
+        ##################################3
         while math:
             ### INPUT
             for event in pygame.event.get():
@@ -469,20 +495,15 @@ class Engine:
                     quit()
             TIME = clock.tick()
             time_since_frame += TIME
-            if time_since_frame >= 2000:
+            if time_since_frame >= 4000:
                 math = False
             self.__WINDOW.ClearScreen()
             self.__WINDOW.getSurface().blit(self.__THIS_IS_NOT_MTH.getSurface(),
                                             self.__THIS_IS_NOT_MTH.getPOS())
             self.__WINDOW.updateFrames()
 
-
-
     def winScreen(self):
         from random import randrange
-        #####################################
-        self.__MUSIC_BOSS.stop()
-        #####################################
         clock = pygame.time.Clock()
         explode = True
         time_since_frame = 0
@@ -490,10 +511,10 @@ class Engine:
         explosion_counter = 0
         self.__EXPLOSION.setPosition((randrange(self.__BOSS.getPOS()[0],
                                                 self.__BOSS.getPOS()[0] +
-                                                self.__BOSS.getWidth() - 300),
+                                                self.__BOSS.getWidth() - 450),
                                       randrange(self.__BOSS.getPOS()[1],
                                                 self.__BOSS.getPOS()[1] +
-                                                self.__BOSS.getHeight() - 300)))
+                                                self.__BOSS.getHeight() - 400)))
         end = True
         while explode:
             ### INPUT
@@ -504,8 +525,10 @@ class Engine:
             TIME = clock.tick()
             time_since_frame += TIME
             if explosion_counter < 16:
+                if time_since_frame >= 30:
+                    self.__EXPLOSION.setPosition((2000, 2000))
                 if time_since_frame >= 110:
-                    flip = randrange(0,1)
+                    flip = randrange(0,2)
                     if flip == 0:
                         self.__EXPLOSION.setFlipX()
                     self.__EXPLOSION_SOUND.stop()
@@ -514,11 +537,11 @@ class Engine:
                     # EXPLOSION
                     explosion_counter += 1
                     self.__EXPLOSION.setPosition((randrange(self.__BOSS.getPOS()[0],
-                                                            self.__BOSS.getPOS()[0]+
-                                                            self.__BOSS.getWidth() - 300),
+                                                            self.__BOSS.getPOS()[0] +
+                                                            self.__BOSS.getWidth() - 450),
                                                   randrange(self.__BOSS.getPOS()[1],
-                                                            self.__BOSS.getPOS()[1]+
-                                                            self.__BOSS.getHeight() - 300)))
+                                                            self.__BOSS.getPOS()[1] +
+                                                            self.__BOSS.getHeight() - 400)))
                 self.__WINDOW.ClearScreen()
                 self.blitBossLevel()
                 self.__WINDOW.getSurface().blit(self.__EXPLOSION.getSurface(),
@@ -533,23 +556,28 @@ class Engine:
                 self.__WINDOW.updateFrames()
 
 
-
     def deathScreen(self):
         #####################################
-        self.__MUSIC_BOSS.fadeout(3000)
         self.__DEATH_SOUND.play(0)
         #####################################
-        while True:
+        death = True
+        while death:
             ### INPUT
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
+            PRESSED_KEYS = pygame.key.get_pressed()
+            if PRESSED_KEYS[pygame.K_SPACE]:
+                death = False
+
+
             self.__WINDOW.ClearScreen()
             ###### BG
             self.__WINDOW.getSurface().blit(self.__DEATH_BG.getSurface(),
                                             self.__DEATH_BG.getPOS())
             self.__WINDOW.updateFrames()
+
 
     def blitPeacefulNight(self):
         self.__WINDOW.ClearScreen()
@@ -609,7 +637,7 @@ class Engine:
 if __name__ == "__main__":
     pygame.init()
     GAME = Engine()
-    GAME.peacefulNight()
+    GAME.titleScreen()
 
 
 
